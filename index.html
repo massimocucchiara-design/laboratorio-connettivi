@@ -138,7 +138,20 @@
       border-radius: 8px;
       font-size: 1rem;
     }
+.relation-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
 
+.relation-select:focus {
+  outline: none;
+  border-color: #3446a3;
+}
     .connector-input:focus {
       outline: none;
       border-color: #3446a3;
@@ -319,11 +332,66 @@
 
     <div id="orderResult" class="result"></div>
 
-    <div id="connectorSection" class="hidden">
+   <div id="connectorSection" class="hidden">
 
-      <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
+  <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
 
-      <h2 class="exercise-title">
+  <h2 class="exercise-title">
+    2. Individua la relazione logica
+  </h2>
+
+  <p class="instruction">
+    Prima di scegliere il connettivo, chiediti quale rapporto
+    esiste tra le due informazioni.
+  </p>
+
+  <div id="relationExercise"></div>
+
+  <div class="buttons">
+    <button class="main-btn verify-btn" id="verifyRelationsBtn">
+      Verifica relazioni
+    </button>
+  </div>
+
+  <div id="relationResult" class="result"></div>
+
+
+  <div id="connectorStage" class="hidden">
+
+    <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
+
+    <h2 class="exercise-title">
+      3. Scegli i connettivi
+    </h2>
+
+    <p class="instruction">
+      Ora che hai riconosciuto le relazioni logiche,
+      scegli un connettivo appropriato per esprimerle.
+    </p>
+
+    <div id="orderedSentences"></div>
+
+    <div class="buttons">
+      <button class="main-btn verify-btn" id="verifyConnectorsBtn">
+        Verifica connettivi e testo
+      </button>
+    </div>
+
+    <div id="connectorResult" class="result"></div>
+
+    <div id="textPreview" class="text-preview hidden">
+
+      <h3>4. Il testo che hai costruito</h3>
+
+      <div id="constructedText" class="constructed-text"></div>
+
+      <div id="evaluationGrid" class="evaluation-grid"></div>
+
+    </div>
+
+  </div>
+
+</div>
         2. Scegli i connettivi
       </h2>
 
@@ -571,7 +639,14 @@ let currentLevel = "facile";
 let currentExercise = null;
 let currentSentences = [];
 let connectorAnswers = {};
-
+const relationOptions = [
+  "causa",
+  "conseguenza",
+  "opposizione",
+  "concessione",
+  "aggiunta",
+  "spiegazione"
+];
 
 function shuffle(array) {
 
@@ -617,13 +692,18 @@ function loadExercise() {
     shuffle(currentExercise.sentences);
 
   connectorAnswers = {};
+relationAnswers = {};
 
   renderSentences();
 
   document
     .getElementById("connectorSection")
     .classList.add("hidden");
+document
+  .getElementById("connectorStage")
+  .classList.add("hidden");
 
+hideResult("relationResult");
   document
     .getElementById("textPreview")
     .classList.add("hidden");
@@ -786,8 +866,11 @@ function verifyOrder() {
       .getElementById("connectorSection")
       .classList.remove("hidden");
 
-    renderConnectorExercise();
+renderRelationExercise();
 
+document
+  .getElementById("connectorStage")
+  .classList.add("hidden");
   } else {
 
     result.className = "result wrong";
@@ -815,7 +898,258 @@ function getOrderedSentences() {
       )
   );
 }
+function renderRelationExercise(showFeedback = false) {
 
+  const container =
+    document.getElementById("relationExercise");
+
+  container.innerHTML = "";
+
+  const ordered =
+    getOrderedSentences();
+
+
+  ordered.forEach((sentence, index) => {
+
+    const row =
+      document.createElement("div");
+
+    row.className = "sentence";
+
+
+    const number =
+      document.createElement("div");
+
+    number.className = "sentence-number";
+    number.textContent = index + 1;
+
+
+    const text =
+      document.createElement("div");
+
+    text.className = "sentence-text";
+    text.textContent = sentence.text;
+
+
+    row.appendChild(number);
+    row.appendChild(text);
+
+    container.appendChild(row);
+
+
+    if (index < ordered.length - 1) {
+
+      const next =
+        ordered[index + 1];
+
+      const relationKey =
+        `${sentence.id}-${next.id}`;
+
+      const relation =
+        currentExercise.relations[relationKey];
+
+
+      const area =
+        document.createElement("div");
+
+      area.className = "connector-area";
+
+
+      const label =
+        document.createElement("div");
+
+      label.className = "connector-label";
+
+      label.textContent =
+        "Quale relazione logica lega queste due informazioni?";
+
+
+      const select =
+        document.createElement("select");
+
+      select.className = "relation-select";
+
+
+      const placeholder =
+        document.createElement("option");
+
+      placeholder.value = "";
+      placeholder.textContent = "Scegli la relazione...";
+
+      select.appendChild(placeholder);
+
+
+      relationOptions.forEach(option => {
+
+        const item =
+          document.createElement("option");
+
+        item.value = option;
+        item.textContent =
+          option.charAt(0).toUpperCase() + option.slice(1);
+
+        select.appendChild(item);
+      });
+
+
+      select.value =
+        relationAnswers[relationKey] || "";
+
+
+      select.addEventListener(
+        "change",
+        event => {
+
+          relationAnswers[relationKey] =
+            event.target.value;
+
+          hideResult("relationResult");
+          hideResult("connectorResult");
+
+          document
+            .getElementById("connectorStage")
+            .classList.add("hidden");
+
+          document
+            .getElementById("textPreview")
+            .classList.add("hidden");
+        }
+      );
+
+
+      area.appendChild(label);
+      area.appendChild(select);
+
+
+      if (showFeedback) {
+
+        const answer =
+          relationAnswers[relationKey] || "";
+
+        const correct =
+          answer === relation.type;
+
+
+        const feedback =
+          document.createElement("div");
+
+
+        if (correct) {
+
+          feedback.className =
+            "feedback correct";
+
+          feedback.innerHTML =
+            `
+            <strong>✓ Relazione riconosciuta.</strong><br>
+            ${relation.explanation}
+            <br>
+            <span class="type-badge">
+              ${relation.type}
+            </span>
+            `;
+
+        } else {
+
+          feedback.className =
+            "feedback wrong";
+
+          feedback.innerHTML =
+            `
+            <strong>✗ Rifletti ancora.</strong><br>
+            Chiediti: la seconda informazione deriva dalla prima,
+            la contrasta, la spiega oppure aggiunge semplicemente
+            un'altra informazione?
+            `;
+        }
+
+
+        area.appendChild(feedback);
+      }
+
+
+      container.appendChild(area);
+    }
+  });
+}
+
+
+function evaluateRelations() {
+
+  const keys =
+    Object.keys(currentExercise.relations);
+
+  let correctCount = 0;
+
+
+  keys.forEach(key => {
+
+    if (
+      relationAnswers[key] ===
+      currentExercise.relations[key].type
+    ) {
+      correctCount++;
+    }
+  });
+
+
+  return {
+    total: keys.length,
+    correct: correctCount
+  };
+}
+
+
+function verifyRelations() {
+
+  const evaluation =
+    evaluateRelations();
+
+  renderRelationExercise(true);
+
+
+  const result =
+    document.getElementById("relationResult");
+
+
+  if (evaluation.correct === evaluation.total) {
+
+    result.className =
+      "result correct";
+
+    result.innerHTML =
+      `
+      <strong>✓ Hai riconosciuto tutte le relazioni logiche.</strong><br>
+      Ora scegli i connettivi che possono renderle esplicite nel testo.
+      `;
+
+
+    document
+      .getElementById("connectorStage")
+      .classList.remove("hidden");
+
+
+    renderConnectorExercise();
+
+  } else {
+
+    result.className =
+      "result wrong";
+
+    result.innerHTML =
+      `
+      <strong>Relazioni corrette:
+      ${evaluation.correct}/${evaluation.total}</strong><br>
+      Prima di passare ai connettivi,
+      rivedi i rapporti tra le informazioni.
+      `;
+
+
+    document
+      .getElementById("connectorStage")
+      .classList.add("hidden");
+  }
+}
 
 function renderConnectorExercise(showFeedback = false) {
 
@@ -1130,12 +1464,13 @@ function showTextEvaluation(evaluation) {
 
   const repetitions =
     findRepetitions(evaluation.answers);
-
+const relationEvaluation =
+  evaluateRelations();
 
   const logicStatus =
-    evaluation.correct === evaluation.total
-      ? "✅"
-      : "❌";
+  relationEvaluation.correct === relationEvaluation.total
+    ? "✅"
+    : "❌";
 
 
   const connectorStatus =
@@ -1320,7 +1655,12 @@ document
     verifyOrder
   );
 
-
+document
+  .getElementById("verifyRelationsBtn")
+  .addEventListener(
+    "click",
+    verifyRelations
+  );
 document
   .getElementById("verifyConnectorsBtn")
   .addEventListener(
