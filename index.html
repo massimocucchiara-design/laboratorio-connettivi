@@ -3,305 +3,570 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Laboratorio interattivo per esercitarsi sulla coesione testuale, sulle relazioni logiche e sull'uso dei connettivi.">
   <title>Laboratorio della frase e dei connettivi</title>
 
   <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      padding: 30px 20px;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #222;
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --ink:#1f2937;
+      --muted:#667085;
+      --primary:#3446a3;
+      --primary-2:#eef2ff;
+      --border:#e5e7eb;
+      --ok-bg:#ecfdf5;
+      --ok:#166534;
+      --ok-border:#bbf7d0;
+      --warn-bg:#fffbeb;
+      --warn:#92400e;
+      --warn-border:#fde68a;
+      --bad-bg:#fff1f2;
+      --bad:#9f1239;
+      --bad-border:#fecdd3;
+      --info-bg:#eff6ff;
+      --info:#1d4ed8;
+      --info-border:#bfdbfe;
+      --shadow:0 8px 30px rgba(0,0,0,.08);
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 16px;
-      padding: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      padding:28px 18px;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
     }
 
-    h1 {
-      margin-top: 0;
-      color: #3446a3;
+    button,input,select,textarea{
+      font:inherit;
     }
 
-    .subtitle {
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 30px;
+    button{
+      touch-action:manipulation;
     }
 
-    .levels {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
+    .container{
+      max-width:980px;
+      margin:0 auto;
+      background:var(--card);
+      border-radius:18px;
+      padding:34px;
+      box-shadow:var(--shadow);
     }
 
-    .level-btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #e5e7eb;
-      cursor: pointer;
-      font-weight: bold;
+    header{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom:26px;
     }
 
-    .level-btn.active {
-      background: #3446a3;
-      color: white;
+    h1{
+      margin:0;
+      color:var(--primary);
+      font-size:clamp(1.8rem,3vw,2.4rem);
+      line-height:1.15;
     }
 
-    .exercise-box {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 25px;
+    .subtitle{
+      margin:.7rem 0 0;
+      color:var(--muted);
+      line-height:1.6;
+      max-width:760px;
     }
 
-    .exercise-title { margin-top: 0; }
-
-    .instruction {
-      color: #555;
-      line-height: 1.5;
+    .top-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    .sentence {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: white;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 8px;
+    .ghost-btn,.icon-btn{
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--ink);
+      border-radius:10px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:700;
     }
 
-    .sentence-number {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: #eef2ff;
-      color: #3446a3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      flex-shrink: 0;
+    .ghost-btn:hover,.icon-btn:hover{background:#f8fafc}
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:12px;
+      align-items:end;
+      margin:22px 0 26px;
     }
 
-    .sentence-text {
-      flex: 1;
-      line-height: 1.5;
+    .field-label{
+      display:block;
+      font-size:.86rem;
+      font-weight:700;
+      color:#475467;
+      margin-bottom:7px;
     }
 
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .levels{
+      display:flex;
+      gap:8px;
     }
 
-    .arrow-btn {
-      border: none;
-      background: #eef2ff;
-      color: #3446a3;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 4px 8px;
+    .level-btn{
+      flex:1;
+      padding:12px;
+      border:none;
+      border-radius:9px;
+      background:#e5e7eb;
+      color:#374151;
+      cursor:pointer;
+      font-weight:700;
     }
 
-    .relation-area,
-    .connector-area {
-      margin: 8px 0 8px 55px;
-      padding: 12px;
-      border-left: 3px solid #c7d2fe;
+    .level-btn.active{
+      background:var(--primary);
+      color:#fff;
     }
 
-    .connector-label {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 6px;
+    .switch-wrap{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--border);
+      padding:10px 12px;
+      border-radius:10px;
+      background:#fff;
+      white-space:nowrap;
     }
 
-    .connector-input,
-    .relation-select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 2px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: white;
+    .switch-wrap input{width:18px;height:18px}
+
+    .progress{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      margin-bottom:22px;
     }
 
-    .connector-input:focus,
-    .relation-select:focus {
-      outline: none;
-      border-color: #3446a3;
+    .progress-step{
+      border-radius:10px;
+      padding:10px 12px;
+      background:#f3f4f6;
+      color:#6b7280;
+      font-size:.88rem;
+      font-weight:700;
+      text-align:center;
+      border:1px solid var(--border);
     }
 
-    .feedback {
-      margin-top: 8px;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      line-height: 1.5;
+    .progress-step.active{
+      background:var(--primary-2);
+      color:var(--primary);
+      border-color:#c7d2fe;
     }
 
-    .feedback.correct {
-      background: #ecfdf5;
-      color: #166534;
+    .progress-step.done{
+      background:var(--ok-bg);
+      color:var(--ok);
+      border-color:var(--ok-border);
     }
 
-    .feedback.warning {
-      background: #fffbeb;
-      color: #92400e;
+    .exercise-box{
+      background:#f8fafc;
+      border-radius:14px;
+      padding:26px;
+      border:1px solid #edf0f3;
     }
 
-    .feedback.wrong {
-      background: #fff1f2;
-      color: #9f1239;
+    .exercise-heading{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:6px;
     }
 
-    .type-badge {
-      display: inline-block;
-      margin-top: 6px;
-      padding: 4px 8px;
-      background: #eef2ff;
-      color: #3446a3;
-      border-radius: 5px;
-      font-size: 0.8rem;
-      font-weight: bold;
+    .exercise-title{
+      margin:0;
+      font-size:1.25rem;
     }
 
-    .buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 25px;
+    .exercise-meta{
+      color:var(--muted);
+      font-size:.86rem;
+      white-space:nowrap;
     }
 
-    .main-btn {
-      flex: 1;
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
+    .instruction{
+      color:#555;
+      line-height:1.55;
+      margin-top:8px;
     }
 
-    .verify-btn {
-      background: #3446a3;
-      color: white;
+    .sentence{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      background:#fff;
+      border:2px solid var(--border);
+      border-radius:10px;
+      padding:14px;
+      margin-bottom:8px;
     }
 
-    .new-btn {
-      background: #e5e7eb;
-      color: #333;
+    .sentence-number{
+      width:30px;height:30px;
+      border-radius:50%;
+      background:var(--primary-2);
+      color:var(--primary);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-weight:700;
+      flex-shrink:0;
     }
 
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      display: none;
-      line-height: 1.6;
+    .sentence-text{
+      flex:1;
+      line-height:1.5;
     }
 
-    .result.correct {
-      display: block;
-      background: #ecfdf5;
-      color: #166534;
-      border: 1px solid #bbf7d0;
+    .controls{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
 
-    .result.warning {
-      display: block;
-      background: #fffbeb;
-      color: #92400e;
-      border: 1px solid #fde68a;
+    .arrow-btn{
+      border:none;
+      background:var(--primary-2);
+      color:var(--primary);
+      border-radius:6px;
+      cursor:pointer;
+      padding:4px 8px;
+      font-weight:700;
     }
 
-    .result.wrong {
-      display: block;
-      background: #fff1f2;
-      color: #9f1239;
-      border: 1px solid #fecdd3;
+    .relation-area,.connector-area{
+      margin:8px 0 10px 44px;
+      padding:12px 14px;
+      border-left:3px solid #c7d2fe;
+      background:rgba(255,255,255,.58);
+      border-radius:0 9px 9px 0;
     }
 
-    .text-preview {
-      margin-top: 25px;
-      background: white;
-      border: 2px solid #dbeafe;
-      border-radius: 12px;
-      padding: 22px;
+    .connector-label{
+      font-size:.86rem;
+      color:#5b6470;
+      margin-bottom:7px;
+      font-weight:700;
     }
 
-    .text-preview h3 {
-      margin-top: 0;
-      color: #3446a3;
+    .connector-input,.relation-select{
+      width:100%;
+      padding:10px 12px;
+      border:2px solid #d1d5db;
+      border-radius:8px;
+      background:#fff;
     }
 
-    .constructed-text {
-      font-size: 1.05rem;
-      line-height: 1.8;
+    .connector-input:focus,.relation-select:focus,textarea:focus,input:focus{
+      outline:none;
+      border-color:var(--primary);
     }
 
-    .evaluation-grid {
-      margin-top: 20px;
-      display: grid;
-      gap: 10px;
+    .support-hint{
+      margin-top:8px;
+      font-size:.86rem;
+      color:var(--info);
+      background:var(--info-bg);
+      border:1px solid var(--info-border);
+      border-radius:8px;
+      padding:8px 10px;
     }
 
-    .evaluation-item {
-      background: #f8fafc;
-      padding: 12px;
-      border-radius: 8px;
+    .buttons{
+      display:flex;
+      gap:10px;
+      margin-top:22px;
     }
 
-    .hidden { display: none; }
+    .main-btn{
+      flex:1;
+      border:none;
+      padding:13px 16px;
+      border-radius:9px;
+      font-weight:700;
+      cursor:pointer;
+    }
 
-    @media (max-width: 650px) {
-      .levels,
-      .buttons {
-        flex-direction: column;
-      }
+    .verify-btn{
+      background:var(--primary);
+      color:#fff;
+    }
 
-      .container { padding: 22px; }
+    .secondary-btn{
+      background:#e5e7eb;
+      color:#303744;
+    }
+
+    .result,.feedback{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:9px;
+      line-height:1.55;
+    }
+
+    .result{display:none}
+
+    .result.correct,.feedback.correct{
+      display:block;
+      background:var(--ok-bg);
+      color:var(--ok);
+      border:1px solid var(--ok-border);
+    }
+
+    .result.warning,.feedback.warning{
+      display:block;
+      background:var(--warn-bg);
+      color:var(--warn);
+      border:1px solid var(--warn-border);
+    }
+
+    .result.wrong,.feedback.wrong{
+      display:block;
+      background:var(--bad-bg);
+      color:var(--bad);
+      border:1px solid var(--bad-border);
+    }
+
+    .result.info,.feedback.info{
+      display:block;
+      background:var(--info-bg);
+      color:var(--info);
+      border:1px solid var(--info-border);
+    }
+
+    .type-badge{
+      display:inline-block;
+      margin-top:7px;
+      padding:4px 8px;
+      background:var(--primary-2);
+      color:var(--primary);
+      border-radius:5px;
+      font-size:.8rem;
+      font-weight:700;
+    }
+
+    .text-preview{
+      margin-top:24px;
+      background:#fff;
+      border:2px solid #dbeafe;
+      border-radius:12px;
+      padding:20px;
+    }
+
+    .text-preview h3{
+      margin-top:0;
+      color:var(--primary);
+    }
+
+    .constructed-text{
+      font-size:1.05rem;
+      line-height:1.85;
+    }
+
+    .evaluation-grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .evaluation-item{
+      background:#f8fafc;
+      padding:12px;
+      border-radius:9px;
+      border:1px solid var(--border);
+    }
+
+    .session-box{
+      margin-top:18px;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fff;
+      color:#475467;
+      font-size:.9rem;
+    }
+
+    .hidden{display:none !important}
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(17,24,39,.56);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:1000;
+    }
+
+    .modal-card{
+      width:min(850px,100%);
+      max-height:88vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 20px 70px rgba(0,0,0,.25);
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .modal-head h2{margin:0}
+
+    .guide-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .guide-item{
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px;
+    }
+
+    .guide-item strong{color:var(--primary)}
+
+    .teacher-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .teacher-card{
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:14px;
+    }
+
+    .teacher-card h3{margin-top:0}
+
+    .teacher-card input,.teacher-card select,.teacher-card textarea{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #d1d5db;
+      border-radius:8px;
+      margin-top:6px;
+      margin-bottom:10px;
+    }
+
+    .teacher-card textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .small-note{
+      font-size:.82rem;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .teacher-list{
+      margin:0;
+      padding-left:18px;
+    }
+
+    .teacher-list li{
+      margin:6px 0;
+    }
+
+    @media (max-width:760px){
+      .container{padding:22px}
+      header{flex-direction:column}
+      .top-actions{justify-content:flex-start}
+      .toolbar{grid-template-columns:1fr}
+      .levels,.buttons{flex-direction:column}
+      .progress{grid-template-columns:1fr 1fr}
+      .evaluation-grid,.guide-grid,.teacher-grid{grid-template-columns:1fr}
+      .relation-area,.connector-area{margin-left:0}
     }
   </style>
 </head>
 
 <body>
 <main class="container">
+  <header>
+    <div>
+      <h1>Laboratorio della frase e dei connettivi</h1>
+      <p class="subtitle">
+        Costruisci una sequenza coerente, riconosci la relazione logica tra le informazioni,
+        scegli connettivi appropriati e rileggi il testo nel suo insieme.
+      </p>
+    </div>
 
-  <h1>Laboratorio della frase e dei connettivi</h1>
+    <div class="top-actions">
+      <button class="ghost-btn" id="guideBtn">Guida ai connettivi</button>
+      <button class="ghost-btn" id="teacherBtn">Modalità docente</button>
+    </div>
+  </header>
 
-  <p class="subtitle">
-    Costruisci una sequenza coerente, riconosci le relazioni logiche,
-    scegli connettivi appropriati e infine rileggi il testo nel suo insieme.
-  </p>
+  <section class="toolbar">
+    <div>
+      <span class="field-label">Livello</span>
+      <div class="levels">
+        <button class="level-btn active" data-level="facile">Facile</button>
+        <button class="level-btn" data-level="medio">Medio</button>
+        <button class="level-btn" data-level="difficile">Difficile</button>
+      </div>
+    </div>
 
-  <div class="levels">
-    <button class="level-btn active" data-level="facile">Facile</button>
-    <button class="level-btn" data-level="medio">Medio</button>
-    <button class="level-btn" data-level="difficile">Difficile</button>
+    <label class="switch-wrap">
+      <input type="checkbox" id="supportToggle">
+      <span>Supporto</span>
+    </label>
+
+    <button class="ghost-btn" id="newBtn">Nuovo esercizio</button>
+  </section>
+
+  <div class="progress">
+    <div class="progress-step active" id="step1">1. Ordine</div>
+    <div class="progress-step" id="step2">2. Relazioni</div>
+    <div class="progress-step" id="step3">3. Connettivi</div>
+    <div class="progress-step" id="step4">4. Testo</div>
   </div>
 
   <section class="exercise-box">
+    <div class="exercise-heading">
+      <h2 class="exercise-title">1. Riordina le frasi</h2>
+      <div class="exercise-meta" id="exerciseMeta"></div>
+    </div>
 
-    <h2 class="exercise-title">1. Riordina le frasi</h2>
     <p class="instruction">
-      Usa le frecce per ricostruire la sequenza che ritieni più coerente.
+      Usa le frecce per ricostruire la sequenza più coerente. La verifica considera
+      la progressione logica dell'esercizio, non soltanto l'ordine casuale delle frasi.
     </p>
 
     <div id="sentences"></div>
 
     <div class="buttons">
       <button class="main-btn verify-btn" id="verifyOrderBtn">Verifica ordine</button>
-      <button class="main-btn new-btn" id="newBtn">Nuovo esercizio</button>
     </div>
 
     <div id="orderResult" class="result"></div>
@@ -329,6 +594,7 @@
       <h2 class="exercise-title">3. Scegli i connettivi</h2>
       <p class="instruction">
         Ora scegli un connettivo adatto a esprimere ciascuna relazione logica.
+        Non tutti i connettivi con significato vicino sono sempre intercambiabili.
       </p>
 
       <div id="orderedSentences"></div>
@@ -347,32 +613,217 @@
         <div id="evaluationGrid" class="evaluation-grid"></div>
       </div>
     </div>
-
   </section>
+
+  <div class="session-box" id="sessionBox">
+    Sessione: 0 esercizi completati.
+  </div>
 </main>
+
+<!-- Guida -->
+<div class="modal hidden" id="guideModal" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="guideTitle">Guida essenziale ai connettivi</h2>
+      <button class="icon-btn" data-close="guideModal">Chiudi</button>
+    </div>
+
+    <div class="guide-grid">
+      <div class="guide-item"><strong>Causa</strong><br>perché, poiché, siccome, dato che</div>
+      <div class="guide-item"><strong>Conseguenza</strong><br>quindi, perciò, dunque, di conseguenza</div>
+      <div class="guide-item"><strong>Opposizione</strong><br>ma, però, tuttavia, eppure</div>
+      <div class="guide-item"><strong>Concessione</strong><br>anche se; benché/sebbene + congiuntivo</div>
+      <div class="guide-item"><strong>Aggiunta</strong><br>inoltre, anche, in più</div>
+      <div class="guide-item"><strong>Spiegazione / conferma</strong><br>infatti, in effetti</div>
+      <div class="guide-item"><strong>Riformulazione</strong><br>cioè, in altre parole</div>
+      <div class="guide-item"><strong>Tempo</strong><br>poi, successivamente, infine, nel frattempo</div>
+    </div>
+
+    <p class="small-note" style="margin-top:14px">
+      Attenzione: due connettivi possono esprimere un rapporto simile ma richiedere costruzioni sintattiche diverse.
+      Per esempio <em>anche se era stanco</em> e <em>benché fosse stanco</em>.
+    </p>
+  </div>
+</div>
+
+<!-- Modalità docente -->
+<div class="modal hidden" id="teacherModal" role="dialog" aria-modal="true" aria-labelledby="teacherTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="teacherTitle">Modalità docente</h2>
+      <button class="icon-btn" data-close="teacherModal">Chiudi</button>
+    </div>
+
+    <div class="teacher-grid">
+      <div class="teacher-card">
+        <h3>Struttura della banca esercizi</h3>
+        <p class="small-note">
+          Questa versione contiene 18 esercizi validati: 6 facili, 6 medi e 6 difficili.
+          Ogni collegamento è associato a una relazione logica e a un insieme di connettivi accettati nel contesto specifico.
+        </p>
+
+        <ul class="teacher-list" id="teacherStats"></ul>
+      </div>
+
+      <div class="teacher-card">
+        <h3>Aggiungi un esercizio temporaneo</h3>
+        <p class="small-note">
+          Le frasi devono essere già nell'ordine corretto. L'esercizio resta disponibile finché la pagina rimane aperta.
+          È una funzione di lavoro rapido; per renderlo permanente va poi inserito nel file HTML.
+        </p>
+
+        <label class="field-label">Livello</label>
+        <select id="teacherLevel">
+          <option value="facile">Facile</option>
+          <option value="medio">Medio</option>
+          <option value="difficile">Difficile</option>
+        </select>
+
+        <label class="field-label">Frasi, una per riga</label>
+        <textarea id="teacherSentences" placeholder="Prima frase&#10;Seconda frase&#10;Terza frase"></textarea>
+
+        <label class="field-label">Relazioni, una per passaggio</label>
+        <input id="teacherRelations" placeholder="es. causa, conseguenza">
+
+        <label class="field-label">Connettivi accettati, separati da | per passaggio</label>
+        <input id="teacherConnectors" placeholder="perché,poiché | quindi,perciò">
+
+        <button class="main-btn verify-btn" id="addTeacherExerciseBtn">
+          Aggiungi alla sessione
+        </button>
+
+        <div id="teacherMessage" class="result"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 const exercises = {
   facile: [
     {
+      title: "Interrogazione",
       sentences: [
-        { id: "A", text: "Luca aveva un'interrogazione il giorno successivo." },
-        { id: "B", text: "Ha deciso di studiare per tutta la sera." },
-        { id: "C", text: "È andato a dormire tardi." }
+        { id:"A", text:"Luca aveva un'interrogazione il giorno successivo." },
+        { id:"B", text:"Ha deciso di studiare per tutta la sera." },
+        { id:"C", text:"È andato a dormire tardi." }
       ],
-      sequence: ["A", "B", "C"],
-      relations: {
-        "A-B": {
-          type: "conseguenza",
-          accepted: ["quindi", "perciò", "dunque", "di conseguenza"],
-          explanation:
-            "La decisione di studiare deriva dal fatto che Luca aveva un'interrogazione."
+      sequence:["A","B","C"],
+      relations:{
+        "A-B":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","dunque","di conseguenza"],
+          explanation:"La decisione di studiare deriva dal fatto che Luca aveva un'interrogazione."
         },
-        "B-C": {
-          type: "conseguenza",
-          accepted: ["quindi", "perciò", "di conseguenza", "così"],
-          explanation:
-            "L'andare a dormire tardi viene presentato come conseguenza dello studio protratto per tutta la sera."
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza","così"],
+          explanation:"L'andare a dormire tardi viene presentato come conseguenza dello studio protratto per tutta la sera."
+        }
+      }
+    },
+    {
+      title:"Autobus",
+      sentences:[
+        {id:"A",text:"L'autobus era in forte ritardo."},
+        {id:"B",text:"Marta è arrivata tardi a scuola."},
+        {id:"C",text:"Ha dovuto spiegare il motivo del ritardo alla docente."}
+      ],
+      sequence:["A","B","C"],
+      relations:{
+        "A-B":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza"],
+          explanation:"L'arrivo in ritardo è presentato come conseguenza del ritardo dell'autobus."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza","per questo"],
+          explanation:"La spiegazione alla docente deriva dal fatto che Marta è arrivata tardi."
+        }
+      }
+    },
+    {
+      title:"Pioggia",
+      sentences:[
+        {id:"A",text:"Nel pomeriggio ha iniziato a piovere forte."},
+        {id:"B",text:"La partita nel parco è stata interrotta."},
+        {id:"C",text:"I ragazzi sono rientrati a casa."}
+      ],
+      sequence:["A","B","C"],
+      relations:{
+        "A-B":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza"],
+          explanation:"L'interruzione della partita è conseguenza della pioggia."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza"],
+          explanation:"Il rientro a casa viene presentato come conseguenza dell'interruzione."
+        }
+      }
+    },
+    {
+      title:"Cinema",
+      sentences:[
+        {id:"A",text:"Sara voleva andare al cinema."},
+        {id:"B",text:"Non c'erano più posti disponibili."},
+        {id:"C",text:"Ha deciso di guardare un film a casa."}
+      ],
+      sequence:["A","B","C"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["ma","però","tuttavia"],
+          explanation:"La seconda informazione introduce un ostacolo rispetto al desiderio espresso nella prima."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza","per questo"],
+          explanation:"La decisione di restare a casa deriva dall'assenza di posti."
+        }
+      }
+    },
+    {
+      title:"Allenamento",
+      sentences:[
+        {id:"A",text:"Paolo era molto stanco."},
+        {id:"B",text:"Ha deciso di andare comunque ad allenarsi."},
+        {id:"C",text:"Ha svolto una seduta più breve del solito."}
+      ],
+      sequence:["A","B","C"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["ma","tuttavia","eppure","però"],
+          explanation:"La decisione di allenarsi contrasta con ciò che ci si aspetterebbe dalla stanchezza."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza","così"],
+          explanation:"La seduta più breve viene presentata come conseguenza della situazione precedente."
+        }
+      }
+    },
+    {
+      title:"Compiti",
+      sentences:[
+        {id:"A",text:"Elena ha terminato tutti i compiti."},
+        {id:"B",text:"Ha preparato lo zaino per il giorno dopo."},
+        {id:"C",text:"È uscita con gli amici."}
+      ],
+      sequence:["A","B","C"],
+      relations:{
+        "A-B":{
+          type:"aggiunta",
+          accepted:["inoltre","poi","in più"],
+          explanation:"La seconda azione aggiunge un'informazione alla prima e può anche segnare una successione."
+        },
+        "B-C":{
+          type:"tempo",
+          accepted:["poi","successivamente","infine"],
+          explanation:"La terza azione viene presentata come successiva alle precedenti."
         }
       }
     }
@@ -380,31 +831,164 @@ const exercises = {
 
   medio: [
     {
-      sentences: [
-        { id: "A", text: "Giulia aveva studiato con impegno per molti giorni." },
-        { id: "B", text: "Era ancora molto agitata prima della verifica." },
-        { id: "C", text: "Ha svolto la prova con grande attenzione." },
-        { id: "D", text: "Ha ottenuto un buon risultato." }
+      title:"Verifica",
+      sentences:[
+        {id:"A",text:"Giulia aveva studiato con impegno per molti giorni."},
+        {id:"B",text:"Era ancora molto agitata prima della verifica."},
+        {id:"C",text:"Ha svolto la prova con grande attenzione."},
+        {id:"D",text:"Ha ottenuto un buon risultato."}
       ],
-      sequence: ["A", "B", "C", "D"],
-      relations: {
-        "A-B": {
-          type: "opposizione",
-          accepted: ["tuttavia", "eppure", "però", "ma"],
-          explanation:
-            "La seconda informazione contrasta con l'aspettativa creata dalla prima."
+      sequence:["A","B","C","D"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","eppure","però","ma"],
+          explanation:"La seconda informazione contrasta con l'aspettativa creata dalla prima."
         },
-        "B-C": {
-          type: "opposizione",
-          accepted: ["tuttavia", "eppure", "però"],
-          explanation:
-            "Nonostante l'agitazione, Giulia riesce a svolgere la prova con attenzione."
+        "B-C":{
+          type:"opposizione",
+          accepted:["tuttavia","eppure","però"],
+          explanation:"Nonostante l'agitazione, Giulia riesce a svolgere la prova con attenzione."
         },
-        "C-D": {
-          type: "conseguenza",
-          accepted: ["quindi", "perciò", "di conseguenza", "così"],
-          explanation:
-            "Il buon risultato viene presentato come conseguenza dello svolgimento attento della prova."
+        "C-D":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza","così"],
+          explanation:"Il buon risultato viene presentato come conseguenza dello svolgimento attento della prova."
+        }
+      }
+    },
+    {
+      title:"Progetto di gruppo",
+      sentences:[
+        {id:"A",text:"Il progetto era più complesso del previsto."},
+        {id:"B",text:"Il gruppo ha diviso con precisione i compiti."},
+        {id:"C",text:"Ogni studente ha completato la propria parte."},
+        {id:"D",text:"Il lavoro è stato consegnato nei tempi stabiliti."}
+      ],
+      sequence:["A","B","C","D"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"La buona organizzazione contrasta con la difficoltà iniziale del progetto."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"La divisione dei compiti rende possibile il completamento delle singole parti."
+        },
+        "C-D":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza"],
+          explanation:"La consegna nei tempi deriva dal completamento delle parti."
+        }
+      }
+    },
+    {
+      title:"Biblioteca",
+      sentences:[
+        {id:"A",text:"La biblioteca chiudeva alle diciotto."},
+        {id:"B",text:"Marco doveva ancora consultare alcuni documenti."},
+        {id:"C",text:"Ha accelerato il lavoro."},
+        {id:"D",text:"È riuscito a terminare la ricerca prima della chiusura."}
+      ],
+      sequence:["A","B","C","D"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["ma","tuttavia","però"],
+          explanation:"Il tempo limitato contrasta con il lavoro ancora da svolgere."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"Marco accelera il lavoro perché deve ancora consultare documenti."
+        },
+        "C-D":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"Il completamento della ricerca deriva dall'aver accelerato il lavoro."
+        }
+      }
+    },
+    {
+      title:"Concerto",
+      sentences:[
+        {id:"A",text:"I biglietti per il concerto erano molto costosi."},
+        {id:"B",text:"Anna desiderava assistere allo spettacolo da mesi."},
+        {id:"C",text:"Ha deciso di utilizzare una parte dei suoi risparmi."},
+        {id:"D",text:"Ha acquistato il biglietto."}
+      ],
+      sequence:["A","B","C","D"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"Il desiderio di partecipare si contrappone all'ostacolo economico."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"La decisione di usare i risparmi deriva dal forte desiderio di partecipare."
+        },
+        "C-D":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","quindi"],
+          explanation:"L'acquisto è reso possibile dall'uso dei risparmi."
+        }
+      }
+    },
+    {
+      title:"Corso di fotografia",
+      sentences:[
+        {id:"A",text:"Davide non aveva mai usato una macchina fotografica manuale."},
+        {id:"B",text:"Si è iscritto a un corso di fotografia."},
+        {id:"C",text:"Ha imparato a regolare tempi e diaframma."},
+        {id:"D",text:"Ora riesce a controllare meglio l'esposizione."}
+      ],
+      sequence:["A","B","C","D"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"L'iscrizione al corso contrasta con la mancanza di esperienza iniziale."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"L'apprendimento deriva dalla frequenza del corso."
+        },
+        "C-D":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza"],
+          explanation:"Il miglior controllo dell'esposizione deriva dalle competenze acquisite."
+        }
+      }
+    },
+    {
+      title:"Lettura",
+      sentences:[
+        {id:"A",text:"Francesca legge soprattutto romanzi storici."},
+        {id:"B",text:"Le interessa ricostruire il contesto delle vicende narrate."},
+        {id:"C",text:"Consulta spesso articoli e documentari sull'epoca."},
+        {id:"D",text:"La lettura diventa per lei anche un'occasione di approfondimento."}
+      ],
+      sequence:["A","B","C","D"],
+      relations:{
+        "A-B":{
+          type:"spiegazione",
+          accepted:["infatti","in effetti"],
+          explanation:"La seconda informazione spiega e conferma l'interesse indicato nella prima."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["per questo","quindi","di conseguenza"],
+          explanation:"La consultazione di altre fonti deriva dall'interesse per il contesto storico."
+        },
+        "C-D":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"L'approfondimento deriva dall'integrazione tra lettura e altre fonti."
         }
       }
     }
@@ -412,45 +996,206 @@ const exercises = {
 
   difficile: [
     {
-      sentences: [
-        { id: "A", text: "Marco desiderava partecipare al viaggio di istruzione." },
-        { id: "B", text: "La quota di partecipazione era piuttosto alta." },
-        { id: "C", text: "Non voleva rinunciare al viaggio." },
-        { id: "D", text: "Decise di mettere da parte una parte dei suoi risparmi." },
-        { id: "E", text: "Dopo alcune settimane riuscì a raggiungere la cifra richiesta." },
-        { id: "F", text: "Poté confermare la propria partecipazione." }
+      title:"Viaggio di istruzione",
+      sentences:[
+        {id:"A",text:"Marco desiderava partecipare al viaggio di istruzione."},
+        {id:"B",text:"La quota di partecipazione era piuttosto alta."},
+        {id:"C",text:"Non voleva rinunciare al viaggio."},
+        {id:"D",text:"Decise di mettere da parte una parte dei suoi risparmi."},
+        {id:"E",text:"Dopo alcune settimane riuscì a raggiungere la cifra richiesta."},
+        {id:"F",text:"Poté confermare la propria partecipazione."}
       ],
-      sequence: ["A", "B", "C", "D", "E", "F"],
-      relations: {
-        "A-B": {
-          type: "opposizione",
-          accepted: ["tuttavia", "però", "ma"],
-          explanation:
-            "Il desiderio di partecipare incontra un ostacolo: il costo elevato."
+      sequence:["A","B","C","D","E","F"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","ma"],
+          explanation:"Il desiderio di partecipare incontra un ostacolo: il costo elevato."
         },
-        "B-C": {
-          type: "opposizione",
-          accepted: ["tuttavia", "eppure", "però"],
-          explanation:
-            "Nonostante il costo elevato, Marco non vuole rinunciare."
+        "B-C":{
+          type:"opposizione",
+          accepted:["tuttavia","eppure","però"],
+          explanation:"Nonostante il costo elevato, Marco non vuole rinunciare."
         },
-        "C-D": {
-          type: "conseguenza",
-          accepted: ["quindi", "perciò", "dunque", "di conseguenza"],
-          explanation:
-            "La decisione di risparmiare deriva dalla volontà di non rinunciare al viaggio."
+        "C-D":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","dunque","di conseguenza"],
+          explanation:"La decisione di risparmiare deriva dalla volontà di non rinunciare."
         },
-        "D-E": {
-          type: "conseguenza",
-          accepted: ["così", "in questo modo", "di conseguenza"],
-          explanation:
-            "Il raggiungimento della cifra è il risultato dell'azione di risparmiare."
+        "D-E":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"Il raggiungimento della cifra è il risultato dell'azione di risparmiare."
         },
-        "E-F": {
-          type: "conseguenza",
-          accepted: ["quindi", "perciò", "di conseguenza"],
-          explanation:
-            "Aver raggiunto la cifra necessaria permette di confermare la partecipazione."
+        "E-F":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","di conseguenza"],
+          explanation:"Aver raggiunto la cifra necessaria permette di confermare la partecipazione."
+        }
+      }
+    },
+    {
+      title:"Stage",
+      sentences:[
+        {id:"A",text:"Il periodo di stage richiedeva spostamenti quotidiani molto lunghi."},
+        {id:"B",text:"Sara considerava l'esperienza importante per la propria formazione."},
+        {id:"C",text:"Ha organizzato gli orari con grande precisione."},
+        {id:"D",text:"Ha ridotto alcune attività nel tempo libero."},
+        {id:"E",text:"È riuscita a rispettare tutti gli impegni."}
+      ],
+      sequence:["A","B","C","D","E"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"Il valore attribuito allo stage contrasta con la difficoltà degli spostamenti."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"L'organizzazione deriva dall'importanza attribuita all'esperienza."
+        },
+        "C-D":{
+          type:"aggiunta",
+          accepted:["inoltre","in più"],
+          explanation:"La riduzione delle attività si aggiunge all'organizzazione degli orari."
+        },
+        "D-E":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"Il rispetto degli impegni deriva dalle scelte organizzative precedenti."
+        }
+      }
+    },
+    {
+      title:"Mostra",
+      sentences:[
+        {id:"A",text:"La mostra aveva ricevuto recensioni contrastanti."},
+        {id:"B",text:"Luca era interessato soprattutto al tema affrontato."},
+        {id:"C",text:"Ha deciso di visitarla personalmente."},
+        {id:"D",text:"Alcune opere lo hanno colpito molto."},
+        {id:"E",text:"Ha formulato un giudizio diverso da quello letto nelle recensioni."}
+      ],
+      sequence:["A","B","C","D","E"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"L'interesse personale contrasta con l'incertezza suggerita dalle recensioni."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"La decisione di visitare la mostra deriva dall'interesse per il tema."
+        },
+        "C-D":{
+          type:"tempo",
+          accepted:["durante la visita","poi","successivamente"],
+          explanation:"La quarta informazione si colloca temporalmente durante o dopo la visita."
+        },
+        "D-E":{
+          type:"conseguenza",
+          accepted:["così","di conseguenza","perciò"],
+          explanation:"Il giudizio personale deriva dall'esperienza diretta delle opere."
+        }
+      }
+    },
+    {
+      title:"Esame orale",
+      sentences:[
+        {id:"A",text:"Matteo conosceva bene gli argomenti dell'esame."},
+        {id:"B",text:"Temeva di bloccarsi durante l'esposizione orale."},
+        {id:"C",text:"Ha preparato una scaletta molto sintetica."},
+        {id:"D",text:"Ha provato più volte a esporre ad alta voce."},
+        {id:"E",text:"Il giorno dell'esame è riuscito a parlare con maggiore sicurezza."}
+      ],
+      sequence:["A","B","C","D","E"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"La paura dell'esposizione contrasta con la buona conoscenza degli argomenti."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"La scaletta è una strategia adottata in risposta alla paura di bloccarsi."
+        },
+        "C-D":{
+          type:"aggiunta",
+          accepted:["inoltre","in più"],
+          explanation:"La prova ad alta voce si aggiunge alla preparazione della scaletta."
+        },
+        "D-E":{
+          type:"conseguenza",
+          accepted:["così","di conseguenza","perciò"],
+          explanation:"La maggiore sicurezza è presentata come risultato della preparazione."
+        }
+      }
+    },
+    {
+      title:"Volontariato",
+      sentences:[
+        {id:"A",text:"Il progetto di volontariato richiedeva due pomeriggi alla settimana."},
+        {id:"B",text:"Chiara aveva già molti impegni scolastici."},
+        {id:"C",text:"Riteneva però importante partecipare."},
+        {id:"D",text:"Ha riorganizzato il proprio calendario."},
+        {id:"E",text:"È riuscita a mantenere sia gli impegni scolastici sia quelli del progetto."}
+      ],
+      sequence:["A","B","C","D","E"],
+      relations:{
+        "A-B":{
+          type:"aggiunta",
+          accepted:["inoltre","in più"],
+          explanation:"La seconda informazione aggiunge un'ulteriore difficoltà organizzativa."
+        },
+        "B-C":{
+          type:"opposizione",
+          accepted:["tuttavia","eppure","però"],
+          explanation:"L'importanza attribuita al progetto contrasta con i numerosi impegni."
+        },
+        "C-D":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"La riorganizzazione deriva dalla volontà di partecipare."
+        },
+        "D-E":{
+          type:"conseguenza",
+          accepted:["così","in questo modo","di conseguenza"],
+          explanation:"Il mantenimento degli impegni è il risultato della riorganizzazione."
+        }
+      }
+    },
+    {
+      title:"Tecnologia a scuola",
+      sentences:[
+        {id:"A",text:"La classe utilizzava spesso strumenti digitali durante le attività."},
+        {id:"B",text:"Non tutti gli studenti riuscivano a mantenere la concentrazione."},
+        {id:"C",text:"Il docente ha stabilito momenti precisi per l'uso dei dispositivi."},
+        {id:"D",text:"Ha alternato attività digitali e attività su carta."},
+        {id:"E",text:"La partecipazione è diventata più regolare."}
+      ],
+      sequence:["A","B","C","D","E"],
+      relations:{
+        "A-B":{
+          type:"opposizione",
+          accepted:["tuttavia","però","eppure"],
+          explanation:"L'uso frequente degli strumenti digitali non coincide automaticamente con una buona concentrazione."
+        },
+        "B-C":{
+          type:"conseguenza",
+          accepted:["quindi","perciò","per questo"],
+          explanation:"La regolazione dei dispositivi nasce dal problema di concentrazione."
+        },
+        "C-D":{
+          type:"aggiunta",
+          accepted:["inoltre","in più"],
+          explanation:"L'alternanza delle attività si aggiunge alla regolazione dei dispositivi."
+        },
+        "D-E":{
+          type:"conseguenza",
+          accepted:["così","di conseguenza","in questo modo"],
+          explanation:"La partecipazione più regolare è presentata come risultato delle strategie adottate."
         }
       }
     }
@@ -458,12 +1203,8 @@ const exercises = {
 };
 
 const relationOptions = [
-  "causa",
-  "conseguenza",
-  "opposizione",
-  "concessione",
-  "aggiunta",
-  "spiegazione"
+  "causa","conseguenza","opposizione","concessione",
+  "aggiunta","spiegazione","riformulazione","tempo"
 ];
 
 let currentLevel = "facile";
@@ -471,66 +1212,79 @@ let currentExercise = null;
 let currentSentences = [];
 let relationAnswers = {};
 let connectorAnswers = {};
+let supportMode = false;
 
-function shuffle(array) {
-  const copy = [...array];
+const session = {
+  completed:0,
+  perfect:0,
+  improved:0
+};
 
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
+function shuffle(array){
+  const copy=[...array];
+  for(let i=copy.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
   }
-
   return copy;
 }
 
-function normalize(text) {
+function normalize(text){
   return text
     .toLowerCase()
     .trim()
-    .replace(/[.,;:!?]+$/g, "")
-    .replace(/\s+/g, " ");
+    .replace(/[.,;:!?]+$/g,"")
+    .replace(/\s+/g," ");
 }
 
-function capitalize(text) {
-  if (!text) return "";
-  return text.charAt(0).toUpperCase() + text.slice(1);
+function capitalize(text){
+  if(!text)return "";
+  return text.charAt(0).toUpperCase()+text.slice(1);
 }
 
-function getOrderedSentences() {
+function getOrderedSentences(){
   return currentExercise.sequence.map(
-    id => currentExercise.sentences.find(sentence => sentence.id === id)
+    id=>currentExercise.sentences.find(sentence=>sentence.id===id)
   );
 }
 
-function hideResult(id) {
-  const result = document.getElementById(id);
-  result.className = "result";
-  result.innerHTML = "";
+function hideResult(id){
+  const result=document.getElementById(id);
+  result.className="result";
+  result.innerHTML="";
 }
 
-function resetFollowingStages() {
-  relationAnswers = {};
-  connectorAnswers = {};
+function updateProgress(stage){
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById(`step${i}`);
+    el.classList.remove("active","done");
+    if(i<stage)el.classList.add("done");
+    if(i===stage)el.classList.add("active");
+  }
+}
 
+function updateSessionBox(){
+  document.getElementById("sessionBox").textContent =
+    `Sessione: ${session.completed} esercizi completati · ${session.perfect} senza errori · ${session.improved} corretti ma migliorabili.`;
+}
+
+function resetFollowingStages(){
+  relationAnswers={};
+  connectorAnswers={};
   document.getElementById("relationSection").classList.add("hidden");
   document.getElementById("connectorStage").classList.add("hidden");
   document.getElementById("textPreview").classList.add("hidden");
-
   hideResult("relationResult");
   hideResult("connectorResult");
+  updateProgress(1);
 }
 
-function loadExercise() {
-  const list = exercises[currentLevel];
-
-  currentExercise =
-    list[Math.floor(Math.random() * list.length)];
-
-  currentSentences =
-    shuffle(currentExercise.sentences);
-
-  relationAnswers = {};
-  connectorAnswers = {};
+function loadExercise(){
+  const list=exercises[currentLevel];
+  currentExercise=list[Math.floor(Math.random()*list.length)];
+  currentSentences=shuffle(currentExercise.sentences);
+  relationAnswers={};
+  connectorAnswers={};
 
   renderSentences();
 
@@ -541,189 +1295,170 @@ function loadExercise() {
   hideResult("orderResult");
   hideResult("relationResult");
   hideResult("connectorResult");
+
+  document.getElementById("exerciseMeta").textContent =
+    `${currentExercise.title} · ${currentExercise.sentences.length} frasi`;
+
+  updateProgress(1);
 }
 
-function renderSentences() {
-  const container = document.getElementById("sentences");
-  container.innerHTML = "";
+function renderSentences(){
+  const container=document.getElementById("sentences");
+  container.innerHTML="";
 
-  currentSentences.forEach((sentence, index) => {
-    const row = document.createElement("div");
-    row.className = "sentence";
+  currentSentences.forEach((sentence,index)=>{
+    const row=document.createElement("div");
+    row.className="sentence";
 
-    const number = document.createElement("div");
-    number.className = "sentence-number";
-    number.textContent = index + 1;
+    const number=document.createElement("div");
+    number.className="sentence-number";
+    number.textContent=index+1;
 
-    const text = document.createElement("div");
-    text.className = "sentence-text";
-    text.textContent = sentence.text;
+    const text=document.createElement("div");
+    text.className="sentence-text";
+    text.textContent=sentence.text;
 
-    const controls = document.createElement("div");
-    controls.className = "controls";
+    const controls=document.createElement("div");
+    controls.className="controls";
 
-    if (index > 0) {
-      const up = document.createElement("button");
-      up.className = "arrow-btn";
-      up.textContent = "▲";
-      up.setAttribute("aria-label", "Sposta la frase verso l'alto");
-      up.onclick = () => moveUp(index);
+    if(index>0){
+      const up=document.createElement("button");
+      up.className="arrow-btn";
+      up.textContent="▲";
+      up.setAttribute("aria-label","Sposta la frase verso l'alto");
+      up.onclick=()=>moveUp(index);
       controls.appendChild(up);
     }
 
-    if (index < currentSentences.length - 1) {
-      const down = document.createElement("button");
-      down.className = "arrow-btn";
-      down.textContent = "▼";
-      down.setAttribute("aria-label", "Sposta la frase verso il basso");
-      down.onclick = () => moveDown(index);
+    if(index<currentSentences.length-1){
+      const down=document.createElement("button");
+      down.className="arrow-btn";
+      down.textContent="▼";
+      down.setAttribute("aria-label","Sposta la frase verso il basso");
+      down.onclick=()=>moveDown(index);
       controls.appendChild(down);
     }
 
     row.appendChild(number);
     row.appendChild(text);
     row.appendChild(controls);
-
     container.appendChild(row);
   });
 }
 
-function moveUp(index) {
-  if (index === 0) return;
-
-  [
-    currentSentences[index - 1],
-    currentSentences[index]
-  ] = [
-    currentSentences[index],
-    currentSentences[index - 1]
-  ];
-
+function moveUp(index){
+  if(index===0)return;
+  [currentSentences[index-1],currentSentences[index]]=
+  [currentSentences[index],currentSentences[index-1]];
   renderSentences();
   hideResult("orderResult");
   resetFollowingStages();
 }
 
-function moveDown(index) {
-  if (index === currentSentences.length - 1) return;
-
-  [
-    currentSentences[index + 1],
-    currentSentences[index]
-  ] = [
-    currentSentences[index],
-    currentSentences[index + 1]
-  ];
-
+function moveDown(index){
+  if(index===currentSentences.length-1)return;
+  [currentSentences[index+1],currentSentences[index]]=
+  [currentSentences[index],currentSentences[index+1]];
   renderSentences();
   hideResult("orderResult");
   resetFollowingStages();
 }
 
-function verifyOrder() {
-  const userSequence =
-    currentSentences.map(sentence => sentence.id);
+function verifyOrder(){
+  const userSequence=currentSentences.map(sentence=>sentence.id);
+  const correctSequence=currentExercise.sequence;
+  const isCorrect=
+    userSequence.length===correctSequence.length &&
+    userSequence.every((id,index)=>id===correctSequence[index]);
 
-  const correctSequence =
-    currentExercise.sequence;
+  const result=document.getElementById("orderResult");
 
-  const isCorrect =
-    userSequence.length === correctSequence.length &&
-    userSequence.every(
-      (id, index) => id === correctSequence[index]
-    );
-
-  const result = document.getElementById("orderResult");
-
-  if (isCorrect) {
-    result.className = "result correct";
-    result.innerHTML = `
+  if(isCorrect){
+    result.className="result correct";
+    result.innerHTML=`
       <strong>✓ Ordine coerente.</strong><br>
-      Hai ricostruito correttamente la sequenza delle informazioni.
+      Hai ricostruito correttamente la progressione delle informazioni.
       Ora individua le relazioni logiche tra le frasi.
     `;
 
     document.getElementById("relationSection").classList.remove("hidden");
     document.getElementById("connectorStage").classList.add("hidden");
     document.getElementById("textPreview").classList.add("hidden");
-
     renderRelationExercise(false);
-  } else {
-    result.className = "result wrong";
-    result.innerHTML = `
+    updateProgress(2);
+  }else{
+    result.className="result wrong";
+    result.innerHTML=`
       <strong>La sequenza non è ancora coerente.</strong><br>
-      Chiediti quale informazione costituisce una premessa,
-      quale introduce un contrasto e quale deriva dalle precedenti.
+      Individua prima la premessa, poi chiediti quali informazioni ne derivano,
+      quali la contrastano o quali si aggiungono.
     `;
-
-    document.getElementById("relationSection").classList.add("hidden");
-    document.getElementById("connectorStage").classList.add("hidden");
-    document.getElementById("textPreview").classList.add("hidden");
   }
 }
 
-function renderRelationExercise(showFeedback = false) {
-  const container =
-    document.getElementById("relationExercise");
+function renderRelationExercise(showFeedback=false){
+  const container=document.getElementById("relationExercise");
+  container.innerHTML="";
+  const ordered=getOrderedSentences();
 
-  container.innerHTML = "";
+  ordered.forEach((sentence,index)=>{
+    const row=document.createElement("div");
+    row.className="sentence";
 
-  const ordered = getOrderedSentences();
+    const number=document.createElement("div");
+    number.className="sentence-number";
+    number.textContent=index+1;
 
-  ordered.forEach((sentence, index) => {
-    const row = document.createElement("div");
-    row.className = "sentence";
-
-    const number = document.createElement("div");
-    number.className = "sentence-number";
-    number.textContent = index + 1;
-
-    const text = document.createElement("div");
-    text.className = "sentence-text";
-    text.textContent = sentence.text;
+    const text=document.createElement("div");
+    text.className="sentence-text";
+    text.textContent=sentence.text;
 
     row.appendChild(number);
     row.appendChild(text);
     container.appendChild(row);
 
-    if (index < ordered.length - 1) {
-      const next = ordered[index + 1];
-      const relationKey = `${sentence.id}-${next.id}`;
-      const relation = currentExercise.relations[relationKey];
+    if(index<ordered.length-1){
+      const next=ordered[index+1];
+      const relationKey=`${sentence.id}-${next.id}`;
+      const relation=currentExercise.relations[relationKey];
 
-      const area = document.createElement("div");
-      area.className = "relation-area";
+      const area=document.createElement("div");
+      area.className="relation-area";
 
-      const label = document.createElement("div");
-      label.className = "connector-label";
-      label.textContent =
-        "Quale relazione logica lega queste due informazioni?";
+      const label=document.createElement("div");
+      label.className="connector-label";
+      label.textContent="Quale relazione logica lega queste due informazioni?";
 
-      const select = document.createElement("select");
-      select.className = "relation-select";
+      const select=document.createElement("select");
+      select.className="relation-select";
 
-      const placeholder = document.createElement("option");
-      placeholder.value = "";
-      placeholder.textContent = "Scegli la relazione...";
+      const placeholder=document.createElement("option");
+      placeholder.value="";
+      placeholder.textContent="Scegli la relazione...";
       select.appendChild(placeholder);
 
-      relationOptions.forEach(option => {
-        const item = document.createElement("option");
-        item.value = option;
-        item.textContent =
-          option.charAt(0).toUpperCase() + option.slice(1);
+      let options=relationOptions;
+      if(supportMode){
+        const distractors=relationOptions
+          .filter(x=>x!==relation.type)
+          .sort(()=>Math.random()-.5)
+          .slice(0,2);
+        options=[relation.type,...distractors].sort(()=>Math.random()-.5);
+      }
+
+      options.forEach(option=>{
+        const item=document.createElement("option");
+        item.value=option;
+        item.textContent=capitalize(option);
         select.appendChild(item);
       });
 
-      select.value =
-        relationAnswers[relationKey] || "";
+      select.value=relationAnswers[relationKey]||"";
 
-      select.addEventListener("change", event => {
-        relationAnswers[relationKey] = event.target.value;
-
+      select.addEventListener("change",event=>{
+        relationAnswers[relationKey]=event.target.value;
         hideResult("relationResult");
         hideResult("connectorResult");
-
         document.getElementById("connectorStage").classList.add("hidden");
         document.getElementById("textPreview").classList.add("hidden");
       });
@@ -731,26 +1466,178 @@ function renderRelationExercise(showFeedback = false) {
       area.appendChild(label);
       area.appendChild(select);
 
-      if (showFeedback) {
-        const answer = relationAnswers[relationKey] || "";
-        const correct = answer === relation.type;
+      if(supportMode){
+        const hint=document.createElement("div");
+        hint.className="support-hint";
+        hint.textContent=
+          relation.type==="conseguenza" ? "Indizio: la seconda informazione deriva dalla prima." :
+          relation.type==="opposizione" ? "Indizio: la seconda informazione contrasta con ciò che ci si aspetterebbe." :
+          relation.type==="aggiunta" ? "Indizio: la seconda informazione aggiunge un elemento." :
+          relation.type==="spiegazione" ? "Indizio: la seconda informazione chiarisce o conferma la prima." :
+          relation.type==="tempo" ? "Indizio: il rapporto principale è di successione temporale." :
+          "Osserva il rapporto tra le due informazioni.";
+        area.appendChild(hint);
+      }
 
-        const feedback = document.createElement("div");
+      if(showFeedback){
+        const answer=relationAnswers[relationKey]||"";
+        const correct=answer===relation.type;
+        const feedback=document.createElement("div");
 
-        if (correct) {
-          feedback.className = "feedback correct";
-          feedback.innerHTML = `
+        if(correct){
+          feedback.className="feedback correct";
+          feedback.innerHTML=`
             <strong>✓ Relazione riconosciuta.</strong><br>
             ${relation.explanation}
-            <br>
-            <span class="type-badge">Relazione: ${relation.type}</span>
+            <br><span class="type-badge">Relazione: ${relation.type}</span>
           `;
-        } else {
-          feedback.className = "feedback wrong";
-          feedback.innerHTML = `
+        }else{
+          feedback.className="feedback wrong";
+          feedback.innerHTML=`
             <strong>✗ Rifletti ancora.</strong><br>
-            Chiediti se la seconda informazione deriva dalla prima,
-            la contrasta, la spiega oppure aggiunge un'informazione.
+            Chiediti se la seconda informazione deriva dalla prima, la contrasta,
+            la spiega, si aggiunge oppure la colloca nel tempo.
+          `;
+        }
+        area.appendChild(feedback);
+      }
+
+      container.appendChild(area);
+    }
+  });
+}
+
+function evaluateRelations(){
+  const keys=Object.keys(currentExercise.relations);
+  let correctCount=0;
+  keys.forEach(key=>{
+    if(relationAnswers[key]===currentExercise.relations[key].type){
+      correctCount++;
+    }
+  });
+  return {total:keys.length,correct:correctCount};
+}
+
+function verifyRelations(){
+  const evaluation=evaluateRelations();
+  renderRelationExercise(true);
+  const result=document.getElementById("relationResult");
+
+  if(evaluation.correct===evaluation.total){
+    result.className="result correct";
+    result.innerHTML=`
+      <strong>✓ Hai riconosciuto tutte le relazioni logiche.</strong><br>
+      Ora scegli i connettivi che possono renderle esplicite.
+    `;
+    document.getElementById("connectorStage").classList.remove("hidden");
+    renderConnectorExercise(false);
+    updateProgress(3);
+  }else{
+    result.className="result wrong";
+    result.innerHTML=`
+      <strong>Relazioni corrette: ${evaluation.correct}/${evaluation.total}</strong><br>
+      Prima di passare ai connettivi, rivedi i rapporti tra le informazioni.
+    `;
+    document.getElementById("connectorStage").classList.add("hidden");
+    document.getElementById("textPreview").classList.add("hidden");
+  }
+}
+
+function renderConnectorExercise(showFeedback=false){
+  const container=document.getElementById("orderedSentences");
+  container.innerHTML="";
+  const ordered=getOrderedSentences();
+
+  ordered.forEach((sentence,index)=>{
+    const row=document.createElement("div");
+    row.className="sentence";
+
+    const number=document.createElement("div");
+    number.className="sentence-number";
+    number.textContent=index+1;
+
+    const text=document.createElement("div");
+    text.className="sentence-text";
+    text.textContent=sentence.text;
+
+    row.appendChild(number);
+    row.appendChild(text);
+    container.appendChild(row);
+
+    if(index<ordered.length-1){
+      const next=ordered[index+1];
+      const relationKey=`${sentence.id}-${next.id}`;
+      const relation=currentExercise.relations[relationKey];
+
+      const area=document.createElement("div");
+      area.className="connector-area";
+
+      const label=document.createElement("div");
+      label.className="connector-label";
+      label.textContent="Quale connettivo useresti per collegare le due informazioni?";
+
+      const input=document.createElement("input");
+      input.className="connector-input";
+      input.placeholder="Scrivi un connettivo...";
+      input.value=connectorAnswers[relationKey]||"";
+
+      input.addEventListener("input",event=>{
+        connectorAnswers[relationKey]=event.target.value;
+        hideResult("connectorResult");
+        document.getElementById("textPreview").classList.add("hidden");
+      });
+
+      area.appendChild(label);
+      area.appendChild(input);
+
+      if(supportMode){
+        const hint=document.createElement("div");
+        hint.className="support-hint";
+        const sample=relation.accepted.slice(0,2).join(", ");
+        hint.textContent=`Puoi scegliere, per esempio, tra: ${sample}.`;
+        area.appendChild(hint);
+      }
+
+      if(showFeedback){
+        const answer=normalize(connectorAnswers[relationKey]||"");
+        const accepted=relation.accepted.map(normalize);
+        const correct=accepted.includes(answer);
+        const feedback=document.createElement("div");
+
+        if(correct){
+          let repeated=false;
+
+          if(index>0){
+            const previousSentence=ordered[index-1];
+            const previousKey=`${previousSentence.id}-${sentence.id}`;
+            const previousAnswer=normalize(connectorAnswers[previousKey]||"");
+            repeated=Boolean(answer)&&Boolean(previousAnswer)&&answer===previousAnswer;
+          }
+
+          if(repeated){
+            feedback.className="feedback warning";
+            feedback.innerHTML=`
+              <strong>⚠️ Corretto, ma migliorabile.</strong><br>
+              <strong>${capitalize(answer)}</strong> è adatto alla relazione di
+              <strong>${relation.type}</strong>, ma è stato appena usato.
+              La ripetizione ravvicinata rende il testo meno fluido.
+              <br><span class="type-badge">Relazione: ${relation.type}</span>
+            `;
+          }else{
+            feedback.className="feedback correct";
+            feedback.innerHTML=`
+              <strong>✓ Scelta appropriata.</strong><br>
+              ${relation.explanation}
+              <br><span class="type-badge">Relazione: ${relation.type}</span>
+            `;
+          }
+        }else{
+          feedback.className="feedback wrong";
+          feedback.innerHTML=`
+            <strong>✗ Il collegamento non è adeguato.</strong><br>
+            Considera il rapporto logico che hai già riconosciuto e scegli un connettivo
+            compatibile con quella relazione.
+            <br><span class="type-badge">Relazione: ${relation.type}</span>
           `;
         }
 
@@ -762,401 +1649,276 @@ function renderRelationExercise(showFeedback = false) {
   });
 }
 
-function evaluateRelations() {
-  const keys = Object.keys(currentExercise.relations);
-  let correctCount = 0;
+function evaluateConnectors(){
+  const keys=Object.keys(currentExercise.relations);
+  let correctCount=0;
+  const normalizedAnswers=[];
 
-  keys.forEach(key => {
-    if (
-      relationAnswers[key] ===
-      currentExercise.relations[key].type
-    ) {
-      correctCount++;
-    }
-  });
-
-  return {
-    total: keys.length,
-    correct: correctCount
-  };
-}
-
-function verifyRelations() {
-  const evaluation = evaluateRelations();
-
-  renderRelationExercise(true);
-
-  const result =
-    document.getElementById("relationResult");
-
-  if (evaluation.correct === evaluation.total) {
-    result.className = "result correct";
-    result.innerHTML = `
-      <strong>✓ Hai riconosciuto tutte le relazioni logiche.</strong><br>
-      Ora scegli i connettivi che possono renderle esplicite nel testo.
-    `;
-
-    document.getElementById("connectorStage").classList.remove("hidden");
-    renderConnectorExercise(false);
-  } else {
-    result.className = "result wrong";
-    result.innerHTML = `
-      <strong>Relazioni corrette: ${evaluation.correct}/${evaluation.total}</strong><br>
-      Prima di passare ai connettivi, rivedi i rapporti tra le informazioni.
-    `;
-
-    document.getElementById("connectorStage").classList.add("hidden");
-    document.getElementById("textPreview").classList.add("hidden");
-  }
-}
-
-function renderConnectorExercise(showFeedback = false) {
-  const container =
-    document.getElementById("orderedSentences");
-
-  container.innerHTML = "";
-
-  const ordered = getOrderedSentences();
-
-  ordered.forEach((sentence, index) => {
-    const row = document.createElement("div");
-    row.className = "sentence";
-
-    const number = document.createElement("div");
-    number.className = "sentence-number";
-    number.textContent = index + 1;
-
-    const text = document.createElement("div");
-    text.className = "sentence-text";
-    text.textContent = sentence.text;
-
-    row.appendChild(number);
-    row.appendChild(text);
-    container.appendChild(row);
-
-    if (index < ordered.length - 1) {
-      const next = ordered[index + 1];
-      const relationKey = `${sentence.id}-${next.id}`;
-      const relation = currentExercise.relations[relationKey];
-
-      const connectorArea = document.createElement("div");
-      connectorArea.className = "connector-area";
-
-      const label = document.createElement("div");
-      label.className = "connector-label";
-      label.textContent =
-        "Quale connettivo useresti per collegare le due informazioni?";
-
-      const input = document.createElement("input");
-      input.className = "connector-input";
-      input.placeholder = "Scrivi un connettivo...";
-      input.value = connectorAnswers[relationKey] || "";
-
-      input.addEventListener("input", event => {
-        connectorAnswers[relationKey] = event.target.value;
-        hideResult("connectorResult");
-        document.getElementById("textPreview").classList.add("hidden");
-      });
-
-      connectorArea.appendChild(label);
-      connectorArea.appendChild(input);
-
-      if (showFeedback) {
-        const answer =
-          normalize(connectorAnswers[relationKey] || "");
-
-        const accepted =
-          relation.accepted.map(normalize);
-
-        const correct =
-          accepted.includes(answer);
-
-        const feedback =
-          document.createElement("div");
-
-        if (correct) {
-          let repeated = false;
-
-          if (index > 0) {
-            const previousSentence = ordered[index - 1];
-            const previousKey =
-              `${previousSentence.id}-${sentence.id}`;
-
-            const previousAnswer =
-              normalize(connectorAnswers[previousKey] || "");
-
-            repeated =
-              Boolean(answer) &&
-              Boolean(previousAnswer) &&
-              answer === previousAnswer;
-          }
-
-          if (repeated) {
-            feedback.className = "feedback warning";
-            feedback.innerHTML = `
-              <strong>⚠️ Corretto, ma migliorabile.</strong><br>
-              Il connettivo <strong>"${answer}"</strong> è compatibile con
-              questa relazione di <strong>${relation.type}</strong>,
-              ma lo hai già usato nel collegamento precedente.
-              La ripetizione rende il testo meno fluido.
-              <br>
-              <span class="type-badge">Relazione: ${relation.type}</span>
-            `;
-          } else {
-            feedback.className = "feedback correct";
-            feedback.innerHTML = `
-              <strong>✓ Scelta appropriata.</strong><br>
-              ${relation.explanation}
-              <br>
-              <span class="type-badge">Relazione: ${relation.type}</span>
-            `;
-          }
-        } else {
-          feedback.className = "feedback wrong";
-          feedback.innerHTML = `
-            <strong>✗ Il collegamento non è adeguato.</strong><br>
-            Prima di scegliere il connettivo, considera il rapporto logico
-            che hai già riconosciuto tra le due informazioni.
-            <br>
-            <span class="type-badge">Relazione: ${relation.type}</span>
-          `;
-        }
-
-        connectorArea.appendChild(feedback);
-      }
-
-      container.appendChild(connectorArea);
-    }
-  });
-}
-
-function evaluateConnectors() {
-  const keys = Object.keys(currentExercise.relations);
-  let correctCount = 0;
-  const normalizedAnswers = [];
-
-  keys.forEach(key => {
-    const answer =
-      normalize(connectorAnswers[key] || "");
-
+  keys.forEach(key=>{
+    const answer=normalize(connectorAnswers[key]||"");
     normalizedAnswers.push(answer);
-
-    const accepted =
-      currentExercise.relations[key]
-        .accepted
-        .map(normalize);
-
-    if (accepted.includes(answer)) {
-      correctCount++;
-    }
+    const accepted=currentExercise.relations[key].accepted.map(normalize);
+    if(accepted.includes(answer))correctCount++;
   });
 
-  return {
-    total: keys.length,
-    correct: correctCount,
-    answers: normalizedAnswers
-  };
+  return {total:keys.length,correct:correctCount,answers:normalizedAnswers};
 }
 
-function findRepetitions(answers) {
-  const repetitions = [];
-
-  for (let i = 1; i < answers.length; i++) {
-    if (
-      answers[i] &&
-      answers[i] === answers[i - 1]
-    ) {
-      repetitions.push({
-        connector: answers[i],
-        position: i
-      });
+function findRepetitions(answers){
+  const repetitions=[];
+  for(let i=1;i<answers.length;i++){
+    if(answers[i]&&answers[i]===answers[i-1]){
+      repetitions.push({connector:answers[i],position:i});
     }
   }
-
   return repetitions;
 }
 
-function buildConstructedText() {
-  const ordered = getOrderedSentences();
-  let text = ordered[0].text;
+function buildConstructedText(){
+  const ordered=getOrderedSentences();
+  let text=ordered[0].text;
 
-  for (let i = 0; i < ordered.length - 1; i++) {
-    const key =
-      `${ordered[i].id}-${ordered[i + 1].id}`;
-
-    const connector =
-      normalize(connectorAnswers[key] || "");
-
-    text +=
-      " " +
-      `<strong>${capitalize(connector)}</strong>` +
-      " " +
-      ordered[i + 1].text;
+  for(let i=0;i<ordered.length-1;i++){
+    const key=`${ordered[i].id}-${ordered[i+1].id}`;
+    const connector=normalize(connectorAnswers[key]||"");
+    text+=" "+`<strong>${capitalize(connector)}</strong>`+" "+ordered[i+1].text;
   }
-
   return text;
 }
 
-function showTextEvaluation(connectorEvaluation) {
-  const preview =
-    document.getElementById("textPreview");
+function showTextEvaluation(connectorEvaluation){
+  const preview=document.getElementById("textPreview");
+  const constructed=document.getElementById("constructedText");
+  const grid=document.getElementById("evaluationGrid");
 
-  const constructed =
-    document.getElementById("constructedText");
-
-  const grid =
-    document.getElementById("evaluationGrid");
-
-  const relationEvaluation =
-    evaluateRelations();
-
-  const repetitions =
-    findRepetitions(connectorEvaluation.answers);
+  const relationEvaluation=evaluateRelations();
+  const repetitions=findRepetitions(connectorEvaluation.answers);
 
   preview.classList.remove("hidden");
-  constructed.innerHTML = buildConstructedText();
+  constructed.innerHTML=buildConstructedText();
 
-  const logicStatus =
-    relationEvaluation.correct === relationEvaluation.total
-      ? "✅"
-      : "❌";
+  const logicStatus=
+    relationEvaluation.correct===relationEvaluation.total ? "✅" : "❌";
 
-  const connectorStatus =
-    connectorEvaluation.correct === connectorEvaluation.total
-      ? "✅"
-      : "❌";
+  const connectorStatus=
+    connectorEvaluation.correct===connectorEvaluation.total ? "✅" : "❌";
 
-  let varietyStatus = "✅";
-  let varietyText =
-    "Non sono presenti ripetizioni immediate dello stesso connettivo.";
+  let varietyStatus="✅";
+  let varietyText="Non sono presenti ripetizioni immediate dello stesso connettivo.";
 
-  if (repetitions.length > 0) {
-    varietyStatus = "⚠️";
-
-    const repeated =
-      [...new Set(
-        repetitions.map(item => item.connector)
-      )];
-
-    varietyText =
-      `Hai ripetuto consecutivamente ${repeated
-        .map(item => `"${item}"`)
-        .join(", ")}. La scelta può essere grammaticalmente corretta, ma rende il testo meno fluido.`;
+  if(repetitions.length>0){
+    varietyStatus="⚠️";
+    const repeated=[...new Set(repetitions.map(item=>item.connector))];
+    varietyText=
+      `Hai ripetuto consecutivamente ${repeated.map(item=>`"${item}"`).join(", ")}. `+
+      `La scelta può essere corretta, ma il testo risulta meno fluido.`;
   }
 
-  let globalStatus =
-    "✅ Testo coerente ed efficace.";
+  let globalStatus="✅ Testo coerente ed efficace.";
 
-  if (
-    connectorEvaluation.correct === connectorEvaluation.total &&
-    repetitions.length > 0
-  ) {
-    globalStatus =
-      "⚠️ Testo corretto, ma migliorabile dal punto di vista della varietà e della fluidità.";
+  if(connectorEvaluation.correct===connectorEvaluation.total && repetitions.length>0){
+    globalStatus="⚠️ Testo corretto, ma migliorabile per varietà e fluidità.";
   }
 
-  if (
-    relationEvaluation.correct < relationEvaluation.total ||
-    connectorEvaluation.correct < connectorEvaluation.total
-  ) {
-    globalStatus =
-      "❌ Il testo contiene uno o più collegamenti da rivedere.";
+  if(relationEvaluation.correct<relationEvaluation.total ||
+     connectorEvaluation.correct<connectorEvaluation.total){
+    globalStatus="❌ Il testo contiene uno o più collegamenti da rivedere.";
   }
 
-  grid.innerHTML = `
+  grid.innerHTML=`
     <div class="evaluation-item">
       <strong>${logicStatus} Relazioni logiche</strong><br>
-      ${relationEvaluation.correct}/${relationEvaluation.total}
-      relazioni riconosciute correttamente.
+      ${relationEvaluation.correct}/${relationEvaluation.total} riconosciute correttamente.
     </div>
-
     <div class="evaluation-item">
       <strong>${connectorStatus} Appropriatezza dei connettivi</strong><br>
-      ${connectorEvaluation.correct}/${connectorEvaluation.total}
-      connettivi compatibili con il contesto.
+      ${connectorEvaluation.correct}/${connectorEvaluation.total} compatibili con il contesto.
     </div>
-
     <div class="evaluation-item">
       <strong>${varietyStatus} Varietà dei collegamenti</strong><br>
       ${varietyText}
     </div>
-
     <div class="evaluation-item">
       <strong>Valutazione complessiva</strong><br>
       ${globalStatus}
     </div>
   `;
+
+  updateProgress(4);
 }
 
-function verifyConnectors() {
-  const evaluation = evaluateConnectors();
-
+function verifyConnectors(){
+  const evaluation=evaluateConnectors();
   renderConnectorExercise(true);
   showTextEvaluation(evaluation);
 
-  const repetitions =
-    findRepetitions(evaluation.answers);
+  const repetitions=findRepetitions(evaluation.answers);
+  const result=document.getElementById("connectorResult");
 
-  const result =
-    document.getElementById("connectorResult");
-
-  if (evaluation.correct < evaluation.total) {
-    result.className = "result wrong";
-    result.innerHTML = `
+  if(evaluation.correct<evaluation.total){
+    result.className="result wrong";
+    result.innerHTML=`
       <strong>Alcuni collegamenti devono essere rivisti.</strong><br>
-      Connettivi adeguati: ${evaluation.correct}/${evaluation.total}.<br>
+      Connettivi adeguati: ${evaluation.correct}/${evaluation.total}.
       Osserva i feedback sotto ciascuna risposta.
     `;
-  } else if (repetitions.length > 0) {
-    result.className = "result warning";
-    result.innerHTML = `
+  }else if(repetitions.length>0){
+    result.className="result warning";
+    result.innerHTML=`
       <strong>⚠️ Tutti i connettivi sono possibili, ma il testo è migliorabile.</strong><br>
       Hai utilizzato consecutivamente lo stesso connettivo.
-      Rileggi il testo completo e prova a renderlo più vario
-      senza modificare le relazioni logiche.
+      Prova a variare la formulazione senza cambiare la relazione logica.
     `;
-  } else {
-    result.className = "result correct";
-    result.innerHTML = `
+    session.completed++;
+    session.improved++;
+    updateSessionBox();
+  }else{
+    result.className="result correct";
+    result.innerHTML=`
       <strong>✓ Ottimo lavoro.</strong><br>
-      I connettivi sono adeguati e non presentano ripetizioni immediate.
-      Rileggi comunque il testo completo per verificarne fluidità e naturalezza.
+      I connettivi sono adeguati e il testo non presenta ripetizioni immediate.
+      Rileggi comunque il testo completo per verificarne naturalezza e fluidità.
     `;
+    session.completed++;
+    session.perfect++;
+    updateSessionBox();
   }
+
+  document.getElementById("verifyConnectorsBtn").disabled=true;
+  setTimeout(()=>{document.getElementById("verifyConnectorsBtn").disabled=false;},700);
 }
 
-document
-  .querySelectorAll(".level-btn")
-  .forEach(button => {
-    button.addEventListener("click", () => {
-      document
-        .querySelectorAll(".level-btn")
-        .forEach(btn => btn.classList.remove("active"));
+/* Modal */
+function openModal(id){
+  document.getElementById(id).classList.remove("hidden");
+}
 
-      button.classList.add("active");
-      currentLevel = button.dataset.level;
-      loadExercise();
-    });
+function closeModal(id){
+  document.getElementById(id).classList.add("hidden");
+}
+
+document.getElementById("guideBtn").addEventListener("click",()=>openModal("guideModal"));
+document.getElementById("teacherBtn").addEventListener("click",()=>{
+  refreshTeacherStats();
+  openModal("teacherModal");
+});
+
+document.querySelectorAll("[data-close]").forEach(btn=>{
+  btn.addEventListener("click",()=>closeModal(btn.dataset.close));
+});
+
+document.querySelectorAll(".modal").forEach(modal=>{
+  modal.addEventListener("click",e=>{
+    if(e.target===modal)closeModal(modal.id);
+  });
+});
+
+/* Modalità docente */
+function refreshTeacherStats(){
+  const total=
+    exercises.facile.length+exercises.medio.length+exercises.difficile.length;
+
+  document.getElementById("teacherStats").innerHTML=`
+    <li>Totale esercizi: <strong>${total}</strong></li>
+    <li>Facile: <strong>${exercises.facile.length}</strong></li>
+    <li>Medio: <strong>${exercises.medio.length}</strong></li>
+    <li>Difficile: <strong>${exercises.difficile.length}</strong></li>
+  `;
+}
+
+function showTeacherMessage(type,html){
+  const box=document.getElementById("teacherMessage");
+  box.className=`result ${type}`;
+  box.innerHTML=html;
+}
+
+document.getElementById("addTeacherExerciseBtn").addEventListener("click",()=>{
+  const level=document.getElementById("teacherLevel").value;
+  const sentenceLines=document.getElementById("teacherSentences").value
+    .split("\n").map(x=>x.trim()).filter(Boolean);
+
+  const rels=document.getElementById("teacherRelations").value
+    .split(",").map(x=>normalize(x)).filter(Boolean);
+
+  const connGroups=document.getElementById("teacherConnectors").value
+    .split("|")
+    .map(group=>group.split(",").map(x=>normalize(x)).filter(Boolean));
+
+  if(sentenceLines.length<3){
+    showTeacherMessage("wrong","Servono almeno 3 frasi.");
+    return;
+  }
+
+  if(rels.length!==sentenceLines.length-1){
+    showTeacherMessage("wrong",
+      `Servono ${sentenceLines.length-1} relazioni, una per ogni passaggio.`);
+    return;
+  }
+
+  if(connGroups.length!==sentenceLines.length-1 || connGroups.some(g=>g.length===0)){
+    showTeacherMessage("wrong",
+      `Servono ${sentenceLines.length-1} gruppi di connettivi, separati da |.`);
+    return;
+  }
+
+  if(rels.some(r=>!relationOptions.includes(r))){
+    showTeacherMessage("wrong",
+      `Usa soltanto queste relazioni: ${relationOptions.join(", ")}.`);
+    return;
+  }
+
+  const ids=sentenceLines.map((_,i)=>String.fromCharCode(65+i));
+  const relations={};
+
+  for(let i=0;i<ids.length-1;i++){
+    relations[`${ids[i]}-${ids[i+1]}`]={
+      type:rels[i],
+      accepted:connGroups[i],
+      explanation:"Relazione e connettivi definiti dal docente per questo esercizio."
+    };
+  }
+
+  exercises[level].push({
+    title:"Esercizio del docente",
+    sentences:sentenceLines.map((text,i)=>({id:ids[i],text})),
+    sequence:ids,
+    relations
   });
 
-document
-  .getElementById("verifyOrderBtn")
-  .addEventListener("click", verifyOrder);
+  showTeacherMessage("correct",
+    "✓ Esercizio aggiunto alla sessione. Ora puoi chiudere la finestra e selezionare il livello corrispondente.");
+  refreshTeacherStats();
+});
 
-document
-  .getElementById("verifyRelationsBtn")
-  .addEventListener("click", verifyRelations);
+/* Comandi principali */
+document.querySelectorAll(".level-btn").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll(".level-btn").forEach(btn=>btn.classList.remove("active"));
+    button.classList.add("active");
+    currentLevel=button.dataset.level;
+    loadExercise();
+  });
+});
 
-document
-  .getElementById("verifyConnectorsBtn")
-  .addEventListener("click", verifyConnectors);
+document.getElementById("supportToggle").addEventListener("change",e=>{
+  supportMode=e.target.checked;
 
-document
-  .getElementById("newBtn")
-  .addEventListener("click", loadExercise);
+  if(!document.getElementById("relationSection").classList.contains("hidden")){
+    renderRelationExercise(false);
+  }
 
+  if(!document.getElementById("connectorStage").classList.contains("hidden")){
+    renderConnectorExercise(false);
+  }
+});
+
+document.getElementById("verifyOrderBtn").addEventListener("click",verifyOrder);
+document.getElementById("verifyRelationsBtn").addEventListener("click",verifyRelations);
+document.getElementById("verifyConnectorsBtn").addEventListener("click",verifyConnectors);
+document.getElementById("newBtn").addEventListener("click",loadExercise);
+
+updateSessionBox();
 loadExercise();
 </script>
-
 </body>
 </html>
