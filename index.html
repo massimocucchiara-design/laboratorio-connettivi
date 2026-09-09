@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Laboratorio della frase e dei connettivi</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -66,9 +63,7 @@
       padding: 25px;
     }
 
-    .exercise-title {
-      margin-top: 0;
-    }
+    .exercise-title { margin-top: 0; }
 
     .instruction {
       color: #555;
@@ -119,6 +114,7 @@
       padding: 4px 8px;
     }
 
+    .relation-area,
     .connector-area {
       margin: 8px 0 8px 55px;
       padding: 12px;
@@ -131,28 +127,18 @@
       margin-bottom: 6px;
     }
 
-    .connector-input {
+    .connector-input,
+    .relation-select {
       width: 100%;
       padding: 10px 12px;
       border: 2px solid #d1d5db;
       border-radius: 8px;
       font-size: 1rem;
+      background: white;
     }
-.relation-select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 2px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: white;
-  cursor: pointer;
-}
 
-.relation-select:focus {
-  outline: none;
-  border-color: #3446a3;
-}
-    .connector-input:focus {
+    .connector-input:focus,
+    .relation-select:focus {
       outline: none;
       border-color: #3446a3;
     }
@@ -275,9 +261,7 @@
       border-radius: 8px;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
     @media (max-width: 650px) {
       .levels,
@@ -285,23 +269,19 @@
         flex-direction: column;
       }
 
-      .container {
-        padding: 22px;
-      }
+      .container { padding: 22px; }
     }
   </style>
 </head>
 
 <body>
-
 <main class="container">
 
   <h1>Laboratorio della frase e dei connettivi</h1>
 
   <p class="subtitle">
-    Costruisci una sequenza coerente, individua le relazioni logiche
-    e scegli connettivi appropriati. Alla fine rileggi il testo nel suo insieme:
-    una frase può essere grammaticalmente corretta ma poco efficace nel contesto.
+    Costruisci una sequenza coerente, riconosci le relazioni logiche,
+    scegli connettivi appropriati e infine rileggi il testo nel suo insieme.
   </p>
 
   <div class="levels">
@@ -313,7 +293,6 @@
   <section class="exercise-box">
 
     <h2 class="exercise-title">1. Riordina le frasi</h2>
-
     <p class="instruction">
       Usa le frecce per ricostruire la sequenza che ritieni più coerente.
     </p>
@@ -321,83 +300,35 @@
     <div id="sentences"></div>
 
     <div class="buttons">
-      <button class="main-btn verify-btn" id="verifyOrderBtn">
-        Verifica ordine
-      </button>
-
-      <button class="main-btn new-btn" id="newBtn">
-        Nuovo esercizio
-      </button>
+      <button class="main-btn verify-btn" id="verifyOrderBtn">Verifica ordine</button>
+      <button class="main-btn new-btn" id="newBtn">Nuovo esercizio</button>
     </div>
 
     <div id="orderResult" class="result"></div>
 
-   <div id="connectorSection" class="hidden">
+    <div id="relationSection" class="hidden">
+      <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
 
-  <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
-
-  <h2 class="exercise-title">
-    2. Individua la relazione logica
-  </h2>
-
-  <p class="instruction">
-    Prima di scegliere il connettivo, chiediti quale rapporto
-    esiste tra le due informazioni.
-  </p>
-
-  <div id="relationExercise"></div>
-
-  <div class="buttons">
-    <button class="main-btn verify-btn" id="verifyRelationsBtn">
-      Verifica relazioni
-    </button>
-  </div>
-
-  <div id="relationResult" class="result"></div>
-
-
-  <div id="connectorStage" class="hidden">
-
-    <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
-
-    <h2 class="exercise-title">
-      3. Scegli i connettivi
-    </h2>
-
-    <p class="instruction">
-      Ora che hai riconosciuto le relazioni logiche,
-      scegli un connettivo appropriato per esprimerle.
-    </p>
-
-    <div id="orderedSentences"></div>
-
-    <div class="buttons">
-      <button class="main-btn verify-btn" id="verifyConnectorsBtn">
-        Verifica connettivi e testo
-      </button>
-    </div>
-
-    <div id="connectorResult" class="result"></div>
-
-    <div id="textPreview" class="text-preview hidden">
-
-      <h3>4. Il testo che hai costruito</h3>
-
-      <div id="constructedText" class="constructed-text"></div>
-
-      <div id="evaluationGrid" class="evaluation-grid"></div>
-
-    </div>
-
-  </div>
-
-</div>
-        2. Scegli i connettivi
-      </h2>
-
+      <h2 class="exercise-title">2. Individua la relazione logica</h2>
       <p class="instruction">
-        Collega le frasi scegliendo un connettivo coerente con
-        la relazione logica tra le informazioni.
+        Prima di scegliere il connettivo, stabilisci quale rapporto lega ogni coppia di informazioni.
+      </p>
+
+      <div id="relationExercise"></div>
+
+      <div class="buttons">
+        <button class="main-btn verify-btn" id="verifyRelationsBtn">Verifica relazioni</button>
+      </div>
+
+      <div id="relationResult" class="result"></div>
+    </div>
+
+    <div id="connectorStage" class="hidden">
+      <hr style="margin:30px 0;border:none;border-top:1px solid #ddd;">
+
+      <h2 class="exercise-title">3. Scegli i connettivi</h2>
+      <p class="instruction">
+        Ora scegli un connettivo adatto a esprimere ciascuna relazione logica.
       </p>
 
       <div id="orderedSentences"></div>
@@ -411,68 +342,37 @@
       <div id="connectorResult" class="result"></div>
 
       <div id="textPreview" class="text-preview hidden">
-
-        <h3>Il testo che hai costruito</h3>
-
+        <h3>4. Il testo che hai costruito</h3>
         <div id="constructedText" class="constructed-text"></div>
-
         <div id="evaluationGrid" class="evaluation-grid"></div>
-
       </div>
-
     </div>
 
   </section>
-
 </main>
 
 <script>
-
 const exercises = {
-
   facile: [
     {
       sentences: [
-        {
-          id: "A",
-          text: "Luca aveva un'interrogazione il giorno successivo."
-        },
-        {
-          id: "B",
-          text: "Ha deciso di studiare per tutta la sera."
-        },
-        {
-          id: "C",
-          text: "È andato a dormire tardi."
-        }
+        { id: "A", text: "Luca aveva un'interrogazione il giorno successivo." },
+        { id: "B", text: "Ha deciso di studiare per tutta la sera." },
+        { id: "C", text: "È andato a dormire tardi." }
       ],
-
       sequence: ["A", "B", "C"],
-
       relations: {
-
         "A-B": {
           type: "conseguenza",
-          accepted: [
-            "quindi",
-            "perciò",
-            "dunque",
-            "di conseguenza"
-          ],
+          accepted: ["quindi", "perciò", "dunque", "di conseguenza"],
           explanation:
             "La decisione di studiare deriva dal fatto che Luca aveva un'interrogazione."
         },
-
         "B-C": {
           type: "conseguenza",
-          accepted: [
-            "quindi",
-            "perciò",
-            "di conseguenza",
-            "così"
-          ],
+          accepted: ["quindi", "perciò", "di conseguenza", "così"],
           explanation:
-            "Il fatto di andare a dormire tardi viene presentato come conseguenza dello studio protratto per tutta la sera."
+            "L'andare a dormire tardi viene presentato come conseguenza dello studio protratto per tutta la sera."
         }
       }
     }
@@ -481,59 +381,28 @@ const exercises = {
   medio: [
     {
       sentences: [
-        {
-          id: "A",
-          text: "Giulia aveva studiato con impegno per molti giorni."
-        },
-        {
-          id: "B",
-          text: "Era ancora molto agitata prima della verifica."
-        },
-        {
-          id: "C",
-          text: "Ha svolto la prova con grande attenzione."
-        },
-        {
-          id: "D",
-          text: "Ha ottenuto un buon risultato."
-        }
+        { id: "A", text: "Giulia aveva studiato con impegno per molti giorni." },
+        { id: "B", text: "Era ancora molto agitata prima della verifica." },
+        { id: "C", text: "Ha svolto la prova con grande attenzione." },
+        { id: "D", text: "Ha ottenuto un buon risultato." }
       ],
-
       sequence: ["A", "B", "C", "D"],
-
       relations: {
-
         "A-B": {
           type: "opposizione",
-          accepted: [
-            "tuttavia",
-            "eppure",
-            "però",
-            "ma"
-          ],
+          accepted: ["tuttavia", "eppure", "però", "ma"],
           explanation:
             "La seconda informazione contrasta con l'aspettativa creata dalla prima."
         },
-
         "B-C": {
           type: "opposizione",
-          accepted: [
-            "tuttavia",
-            "eppure",
-            "però"
-          ],
+          accepted: ["tuttavia", "eppure", "però"],
           explanation:
             "Nonostante l'agitazione, Giulia riesce a svolgere la prova con attenzione."
         },
-
         "C-D": {
           type: "conseguenza",
-          accepted: [
-            "quindi",
-            "perciò",
-            "di conseguenza",
-            "così"
-          ],
+          accepted: ["quindi", "perciò", "di conseguenza", "così"],
           explanation:
             "Il buon risultato viene presentato come conseguenza dello svolgimento attento della prova."
         }
@@ -544,88 +413,42 @@ const exercises = {
   difficile: [
     {
       sentences: [
-        {
-          id: "A",
-          text: "Marco desiderava partecipare al viaggio di istruzione."
-        },
-        {
-          id: "B",
-          text: "La quota di partecipazione era piuttosto alta."
-        },
-        {
-          id: "C",
-          text: "Non voleva rinunciare al viaggio."
-        },
-        {
-          id: "D",
-          text: "Decise di mettere da parte una parte dei suoi risparmi."
-        },
-        {
-          id: "E",
-          text: "Dopo alcune settimane riuscì a raggiungere la cifra richiesta."
-        },
-        {
-          id: "F",
-          text: "Poté confermare la propria partecipazione."
-        }
+        { id: "A", text: "Marco desiderava partecipare al viaggio di istruzione." },
+        { id: "B", text: "La quota di partecipazione era piuttosto alta." },
+        { id: "C", text: "Non voleva rinunciare al viaggio." },
+        { id: "D", text: "Decise di mettere da parte una parte dei suoi risparmi." },
+        { id: "E", text: "Dopo alcune settimane riuscì a raggiungere la cifra richiesta." },
+        { id: "F", text: "Poté confermare la propria partecipazione." }
       ],
-
       sequence: ["A", "B", "C", "D", "E", "F"],
-
       relations: {
-
         "A-B": {
           type: "opposizione",
-          accepted: [
-            "tuttavia",
-            "però",
-            "ma"
-          ],
+          accepted: ["tuttavia", "però", "ma"],
           explanation:
             "Il desiderio di partecipare incontra un ostacolo: il costo elevato."
         },
-
         "B-C": {
           type: "opposizione",
-          accepted: [
-            "tuttavia",
-            "eppure",
-            "però"
-          ],
+          accepted: ["tuttavia", "eppure", "però"],
           explanation:
             "Nonostante il costo elevato, Marco non vuole rinunciare."
         },
-
         "C-D": {
           type: "conseguenza",
-          accepted: [
-            "quindi",
-            "perciò",
-            "dunque",
-            "di conseguenza"
-          ],
+          accepted: ["quindi", "perciò", "dunque", "di conseguenza"],
           explanation:
             "La decisione di risparmiare deriva dalla volontà di non rinunciare al viaggio."
         },
-
         "D-E": {
           type: "conseguenza",
-          accepted: [
-            "così",
-            "in questo modo",
-            "di conseguenza"
-          ],
+          accepted: ["così", "in questo modo", "di conseguenza"],
           explanation:
             "Il raggiungimento della cifra è il risultato dell'azione di risparmiare."
         },
-
         "E-F": {
           type: "conseguenza",
-          accepted: [
-            "quindi",
-            "perciò",
-            "di conseguenza"
-          ],
+          accepted: ["quindi", "perciò", "di conseguenza"],
           explanation:
             "Aver raggiunto la cifra necessaria permette di confermare la partecipazione."
         }
@@ -634,11 +457,6 @@ const exercises = {
   ]
 };
 
-
-let currentLevel = "facile";
-let currentExercise = null;
-let currentSentences = [];
-let connectorAnswers = {};
 const relationOptions = [
   "causa",
   "conseguenza",
@@ -648,23 +466,24 @@ const relationOptions = [
   "spiegazione"
 ];
 
-function shuffle(array) {
+let currentLevel = "facile";
+let currentExercise = null;
+let currentSentences = [];
+let relationAnswers = {};
+let connectorAnswers = {};
 
+function shuffle(array) {
   const copy = [...array];
 
   for (let i = copy.length - 1; i > 0; i--) {
-
     const j = Math.floor(Math.random() * (i + 1));
-
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
 
   return copy;
 }
 
-
 function normalize(text) {
-
   return text
     .toLowerCase()
     .trim()
@@ -672,17 +491,36 @@ function normalize(text) {
     .replace(/\s+/g, " ");
 }
 
-
 function capitalize(text) {
-
   if (!text) return "";
-
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function getOrderedSentences() {
+  return currentExercise.sequence.map(
+    id => currentExercise.sentences.find(sentence => sentence.id === id)
+  );
+}
+
+function hideResult(id) {
+  const result = document.getElementById(id);
+  result.className = "result";
+  result.innerHTML = "";
+}
+
+function resetFollowingStages() {
+  relationAnswers = {};
+  connectorAnswers = {};
+
+  document.getElementById("relationSection").classList.add("hidden");
+  document.getElementById("connectorStage").classList.add("hidden");
+  document.getElementById("textPreview").classList.add("hidden");
+
+  hideResult("relationResult");
+  hideResult("connectorResult");
+}
 
 function loadExercise() {
-
   const list = exercises[currentLevel];
 
   currentExercise =
@@ -691,88 +529,56 @@ function loadExercise() {
   currentSentences =
     shuffle(currentExercise.sentences);
 
+  relationAnswers = {};
   connectorAnswers = {};
-relationAnswers = {};
 
   renderSentences();
 
-  document
-    .getElementById("connectorSection")
-    .classList.add("hidden");
-document
-  .getElementById("connectorStage")
-  .classList.add("hidden");
-
-hideResult("relationResult");
-  document
-    .getElementById("textPreview")
-    .classList.add("hidden");
+  document.getElementById("relationSection").classList.add("hidden");
+  document.getElementById("connectorStage").classList.add("hidden");
+  document.getElementById("textPreview").classList.add("hidden");
 
   hideResult("orderResult");
+  hideResult("relationResult");
   hideResult("connectorResult");
 }
 
-
 function renderSentences() {
-
-  const container =
-    document.getElementById("sentences");
-
+  const container = document.getElementById("sentences");
   container.innerHTML = "";
 
   currentSentences.forEach((sentence, index) => {
-
-    const row =
-      document.createElement("div");
-
+    const row = document.createElement("div");
     row.className = "sentence";
 
-
-    const number =
-      document.createElement("div");
-
+    const number = document.createElement("div");
     number.className = "sentence-number";
     number.textContent = index + 1;
 
-
-    const text =
-      document.createElement("div");
-
+    const text = document.createElement("div");
     text.className = "sentence-text";
     text.textContent = sentence.text;
 
-
-    const controls =
-      document.createElement("div");
-
+    const controls = document.createElement("div");
     controls.className = "controls";
 
-
     if (index > 0) {
-
-      const up =
-        document.createElement("button");
-
+      const up = document.createElement("button");
       up.className = "arrow-btn";
       up.textContent = "▲";
+      up.setAttribute("aria-label", "Sposta la frase verso l'alto");
       up.onclick = () => moveUp(index);
-
       controls.appendChild(up);
     }
 
-
     if (index < currentSentences.length - 1) {
-
-      const down =
-        document.createElement("button");
-
+      const down = document.createElement("button");
       down.className = "arrow-btn";
       down.textContent = "▼";
+      down.setAttribute("aria-label", "Sposta la frase verso il basso");
       down.onclick = () => moveDown(index);
-
       controls.appendChild(down);
     }
-
 
     row.appendChild(number);
     row.appendChild(text);
@@ -782,60 +588,39 @@ function renderSentences() {
   });
 }
 
-
 function moveUp(index) {
-
   if (index === 0) return;
 
   [
     currentSentences[index - 1],
     currentSentences[index]
-  ] =
-  [
+  ] = [
     currentSentences[index],
     currentSentences[index - 1]
   ];
 
   renderSentences();
-  resetAfterMove();
+  hideResult("orderResult");
+  resetFollowingStages();
 }
 
-
 function moveDown(index) {
-
   if (index === currentSentences.length - 1) return;
 
   [
     currentSentences[index + 1],
     currentSentences[index]
-  ] =
-  [
+  ] = [
     currentSentences[index],
     currentSentences[index + 1]
   ];
 
   renderSentences();
-  resetAfterMove();
-}
-
-
-function resetAfterMove() {
-
   hideResult("orderResult");
-  hideResult("connectorResult");
-
-  document
-    .getElementById("connectorSection")
-    .classList.add("hidden");
-
-  document
-    .getElementById("textPreview")
-    .classList.add("hidden");
+  resetFollowingStages();
 }
-
 
 function verifyOrder() {
-
   const userSequence =
     currentSentences.map(sentence => sentence.id);
 
@@ -843,247 +628,145 @@ function verifyOrder() {
     currentExercise.sequence;
 
   const isCorrect =
+    userSequence.length === correctSequence.length &&
     userSequence.every(
       (id, index) => id === correctSequence[index]
     );
 
-  const result =
-    document.getElementById("orderResult");
-
+  const result = document.getElementById("orderResult");
 
   if (isCorrect) {
-
     result.className = "result correct";
-
-    result.innerHTML =
-      `
+    result.innerHTML = `
       <strong>✓ Ordine coerente.</strong><br>
       Hai ricostruito correttamente la sequenza delle informazioni.
-      Ora passa ai connettivi.
-      `;
+      Ora individua le relazioni logiche tra le frasi.
+    `;
 
-    document
-      .getElementById("connectorSection")
-      .classList.remove("hidden");
+    document.getElementById("relationSection").classList.remove("hidden");
+    document.getElementById("connectorStage").classList.add("hidden");
+    document.getElementById("textPreview").classList.add("hidden");
 
-renderRelationExercise();
-
-document
-  .getElementById("connectorStage")
-  .classList.add("hidden");
+    renderRelationExercise(false);
   } else {
-
     result.className = "result wrong";
-
-    result.innerHTML =
-      `
+    result.innerHTML = `
       <strong>La sequenza non è ancora coerente.</strong><br>
       Chiediti quale informazione costituisce una premessa,
       quale introduce un contrasto e quale deriva dalle precedenti.
-      `;
+    `;
 
-    document
-      .getElementById("connectorSection")
-      .classList.add("hidden");
+    document.getElementById("relationSection").classList.add("hidden");
+    document.getElementById("connectorStage").classList.add("hidden");
+    document.getElementById("textPreview").classList.add("hidden");
   }
 }
 
-
-function getOrderedSentences() {
-
-  return currentExercise.sequence.map(
-    id =>
-      currentExercise.sentences.find(
-        sentence => sentence.id === id
-      )
-  );
-}
 function renderRelationExercise(showFeedback = false) {
-
   const container =
     document.getElementById("relationExercise");
 
   container.innerHTML = "";
 
-  const ordered =
-    getOrderedSentences();
-
+  const ordered = getOrderedSentences();
 
   ordered.forEach((sentence, index) => {
-
-    const row =
-      document.createElement("div");
-
+    const row = document.createElement("div");
     row.className = "sentence";
 
-
-    const number =
-      document.createElement("div");
-
+    const number = document.createElement("div");
     number.className = "sentence-number";
     number.textContent = index + 1;
 
-
-    const text =
-      document.createElement("div");
-
+    const text = document.createElement("div");
     text.className = "sentence-text";
     text.textContent = sentence.text;
 
-
     row.appendChild(number);
     row.appendChild(text);
-
     container.appendChild(row);
 
-
     if (index < ordered.length - 1) {
+      const next = ordered[index + 1];
+      const relationKey = `${sentence.id}-${next.id}`;
+      const relation = currentExercise.relations[relationKey];
 
-      const next =
-        ordered[index + 1];
+      const area = document.createElement("div");
+      area.className = "relation-area";
 
-      const relationKey =
-        `${sentence.id}-${next.id}`;
-
-      const relation =
-        currentExercise.relations[relationKey];
-
-
-      const area =
-        document.createElement("div");
-
-      area.className = "connector-area";
-
-
-      const label =
-        document.createElement("div");
-
+      const label = document.createElement("div");
       label.className = "connector-label";
-
       label.textContent =
         "Quale relazione logica lega queste due informazioni?";
 
-
-      const select =
-        document.createElement("select");
-
+      const select = document.createElement("select");
       select.className = "relation-select";
 
-
-      const placeholder =
-        document.createElement("option");
-
+      const placeholder = document.createElement("option");
       placeholder.value = "";
       placeholder.textContent = "Scegli la relazione...";
-
       select.appendChild(placeholder);
 
-
       relationOptions.forEach(option => {
-
-        const item =
-          document.createElement("option");
-
+        const item = document.createElement("option");
         item.value = option;
         item.textContent =
           option.charAt(0).toUpperCase() + option.slice(1);
-
         select.appendChild(item);
       });
-
 
       select.value =
         relationAnswers[relationKey] || "";
 
+      select.addEventListener("change", event => {
+        relationAnswers[relationKey] = event.target.value;
 
-      select.addEventListener(
-        "change",
-        event => {
+        hideResult("relationResult");
+        hideResult("connectorResult");
 
-          relationAnswers[relationKey] =
-            event.target.value;
-
-          hideResult("relationResult");
-          hideResult("connectorResult");
-
-          document
-            .getElementById("connectorStage")
-            .classList.add("hidden");
-
-          document
-            .getElementById("textPreview")
-            .classList.add("hidden");
-        }
-      );
-
+        document.getElementById("connectorStage").classList.add("hidden");
+        document.getElementById("textPreview").classList.add("hidden");
+      });
 
       area.appendChild(label);
       area.appendChild(select);
 
-
       if (showFeedback) {
+        const answer = relationAnswers[relationKey] || "";
+        const correct = answer === relation.type;
 
-        const answer =
-          relationAnswers[relationKey] || "";
-
-        const correct =
-          answer === relation.type;
-
-
-        const feedback =
-          document.createElement("div");
-
+        const feedback = document.createElement("div");
 
         if (correct) {
-
-          feedback.className =
-            "feedback correct";
-
-          feedback.innerHTML =
-            `
+          feedback.className = "feedback correct";
+          feedback.innerHTML = `
             <strong>✓ Relazione riconosciuta.</strong><br>
             ${relation.explanation}
             <br>
-            <span class="type-badge">
-              ${relation.type}
-            </span>
-            `;
-
+            <span class="type-badge">Relazione: ${relation.type}</span>
+          `;
         } else {
-
-          feedback.className =
-            "feedback wrong";
-
-          feedback.innerHTML =
-            `
+          feedback.className = "feedback wrong";
+          feedback.innerHTML = `
             <strong>✗ Rifletti ancora.</strong><br>
-            Chiediti: la seconda informazione deriva dalla prima,
-            la contrasta, la spiega oppure aggiunge semplicemente
-            un'altra informazione?
-            `;
+            Chiediti se la seconda informazione deriva dalla prima,
+            la contrasta, la spiega oppure aggiunge un'informazione.
+          `;
         }
-
 
         area.appendChild(feedback);
       }
-
 
       container.appendChild(area);
     }
   });
 }
 
-
 function evaluateRelations() {
-
-  const keys =
-    Object.keys(currentExercise.relations);
-
+  const keys = Object.keys(currentExercise.relations);
   let correctCount = 0;
 
-
   keys.forEach(key => {
-
     if (
       relationAnswers[key] ===
       currentExercise.relations[key].type
@@ -1092,167 +775,93 @@ function evaluateRelations() {
     }
   });
 
-
   return {
     total: keys.length,
     correct: correctCount
   };
 }
 
-
 function verifyRelations() {
-
-  const evaluation =
-    evaluateRelations();
+  const evaluation = evaluateRelations();
 
   renderRelationExercise(true);
-
 
   const result =
     document.getElementById("relationResult");
 
-
   if (evaluation.correct === evaluation.total) {
-
-    result.className =
-      "result correct";
-
-    result.innerHTML =
-      `
+    result.className = "result correct";
+    result.innerHTML = `
       <strong>✓ Hai riconosciuto tutte le relazioni logiche.</strong><br>
       Ora scegli i connettivi che possono renderle esplicite nel testo.
-      `;
+    `;
 
-
-    document
-      .getElementById("connectorStage")
-      .classList.remove("hidden");
-
-
-    renderConnectorExercise();
-
+    document.getElementById("connectorStage").classList.remove("hidden");
+    renderConnectorExercise(false);
   } else {
+    result.className = "result wrong";
+    result.innerHTML = `
+      <strong>Relazioni corrette: ${evaluation.correct}/${evaluation.total}</strong><br>
+      Prima di passare ai connettivi, rivedi i rapporti tra le informazioni.
+    `;
 
-    result.className =
-      "result wrong";
-
-    result.innerHTML =
-      `
-      <strong>Relazioni corrette:
-      ${evaluation.correct}/${evaluation.total}</strong><br>
-      Prima di passare ai connettivi,
-      rivedi i rapporti tra le informazioni.
-      `;
-
-
-    document
-      .getElementById("connectorStage")
-      .classList.add("hidden");
+    document.getElementById("connectorStage").classList.add("hidden");
+    document.getElementById("textPreview").classList.add("hidden");
   }
 }
 
 function renderConnectorExercise(showFeedback = false) {
-
   const container =
     document.getElementById("orderedSentences");
 
   container.innerHTML = "";
 
-  const ordered =
-    getOrderedSentences();
-
+  const ordered = getOrderedSentences();
 
   ordered.forEach((sentence, index) => {
-
-    const row =
-      document.createElement("div");
-
+    const row = document.createElement("div");
     row.className = "sentence";
 
-
-    const number =
-      document.createElement("div");
-
+    const number = document.createElement("div");
     number.className = "sentence-number";
     number.textContent = index + 1;
 
-
-    const text =
-      document.createElement("div");
-
+    const text = document.createElement("div");
     text.className = "sentence-text";
     text.textContent = sentence.text;
 
-
     row.appendChild(number);
     row.appendChild(text);
-
     container.appendChild(row);
 
-
     if (index < ordered.length - 1) {
+      const next = ordered[index + 1];
+      const relationKey = `${sentence.id}-${next.id}`;
+      const relation = currentExercise.relations[relationKey];
 
-      const next =
-        ordered[index + 1];
+      const connectorArea = document.createElement("div");
+      connectorArea.className = "connector-area";
 
-      const relationKey =
-        `${sentence.id}-${next.id}`;
-
-      const relation =
-        currentExercise.relations[relationKey];
-
-
-      const connectorArea =
-        document.createElement("div");
-
-      connectorArea.className =
-        "connector-area";
-
-
-      const label =
-        document.createElement("div");
-
-      label.className =
-        "connector-label";
-
+      const label = document.createElement("div");
+      label.className = "connector-label";
       label.textContent =
         "Quale connettivo useresti per collegare le due informazioni?";
 
+      const input = document.createElement("input");
+      input.className = "connector-input";
+      input.placeholder = "Scrivi un connettivo...";
+      input.value = connectorAnswers[relationKey] || "";
 
-      const input =
-        document.createElement("input");
-
-      input.className =
-        "connector-input";
-
-      input.placeholder =
-        "Scrivi un connettivo...";
-
-      input.value =
-        connectorAnswers[relationKey] || "";
-
-      input.addEventListener(
-        "input",
-        event => {
-
-          connectorAnswers[relationKey] =
-            event.target.value;
-
-          hideResult("connectorResult");
-
-          document
-            .getElementById("textPreview")
-            .classList.add("hidden");
-        }
-      );
-
+      input.addEventListener("input", event => {
+        connectorAnswers[relationKey] = event.target.value;
+        hideResult("connectorResult");
+        document.getElementById("textPreview").classList.add("hidden");
+      });
 
       connectorArea.appendChild(label);
       connectorArea.appendChild(input);
 
-
       if (showFeedback) {
-
         const answer =
           normalize(connectorAnswers[relationKey] || "");
 
@@ -1262,114 +871,71 @@ function renderConnectorExercise(showFeedback = false) {
         const correct =
           accepted.includes(answer);
 
-
         const feedback =
           document.createElement("div");
 
-
         if (correct) {
+          let repeated = false;
 
-  // Controlla se lo stesso connettivo
-  // è stato usato immediatamente prima
-  let repeated = false;
+          if (index > 0) {
+            const previousSentence = ordered[index - 1];
+            const previousKey =
+              `${previousSentence.id}-${sentence.id}`;
 
-  if (index > 0) {
+            const previousAnswer =
+              normalize(connectorAnswers[previousKey] || "");
 
-    const previousSentence = ordered[index - 1];
-    const previousKey =
-      `${previousSentence.id}-${sentence.id}`;
+            repeated =
+              Boolean(answer) &&
+              Boolean(previousAnswer) &&
+              answer === previousAnswer;
+          }
 
-    const previousAnswer =
-      normalize(connectorAnswers[previousKey] || "");
-
-    if (
-      answer &&
-      previousAnswer &&
-      answer === previousAnswer
-    ) {
-      repeated = true;
-    }
-  }
-
-
-  if (repeated) {
-
-    feedback.className =
-      "feedback warning";
-
-    feedback.innerHTML =
-      `
-      <strong>⚠️ Corretto, ma migliorabile.</strong><br>
-      Il connettivo <strong>"${answer}"</strong>
-      esprime correttamente una relazione di
-      <strong>${relation.type}</strong>,
-      ma lo hai già utilizzato nel collegamento precedente.
-      <br><br>
-      La frase è grammaticalmente possibile,
-      ma la ripetizione rende il testo meno fluido.
-      Prova a trovare un'altra formulazione adatta
-      alla stessa relazione logica.
-      <br>
-      <span class="type-badge">
-        Relazione: ${relation.type}
-      </span>
-      `;
-
-  } else {
-
-    feedback.className =
-      "feedback correct";
-
-    feedback.innerHTML =
-      `
-      <strong>✓ Scelta appropriata.</strong><br>
-      ${relation.explanation}
-      <br>
-      <span class="type-badge">
-        Relazione: ${relation.type}
-      </span>
-      `;
-  }
-
-} else {
-          feedback.className =
-            "feedback wrong";
-
-          feedback.innerHTML =
-            `
-            <strong>✗ Il collegamento non è adeguato.</strong><br>
-            Prima di scegliere il connettivo, individua
-            il rapporto logico tra le due informazioni.
-            <br>
-            <span class="type-badge">
-              Relazione: ${relation.type}
-            </span>
+          if (repeated) {
+            feedback.className = "feedback warning";
+            feedback.innerHTML = `
+              <strong>⚠️ Corretto, ma migliorabile.</strong><br>
+              Il connettivo <strong>"${answer}"</strong> è compatibile con
+              questa relazione di <strong>${relation.type}</strong>,
+              ma lo hai già usato nel collegamento precedente.
+              La ripetizione rende il testo meno fluido.
+              <br>
+              <span class="type-badge">Relazione: ${relation.type}</span>
             `;
+          } else {
+            feedback.className = "feedback correct";
+            feedback.innerHTML = `
+              <strong>✓ Scelta appropriata.</strong><br>
+              ${relation.explanation}
+              <br>
+              <span class="type-badge">Relazione: ${relation.type}</span>
+            `;
+          }
+        } else {
+          feedback.className = "feedback wrong";
+          feedback.innerHTML = `
+            <strong>✗ Il collegamento non è adeguato.</strong><br>
+            Prima di scegliere il connettivo, considera il rapporto logico
+            che hai già riconosciuto tra le due informazioni.
+            <br>
+            <span class="type-badge">Relazione: ${relation.type}</span>
+          `;
         }
-
 
         connectorArea.appendChild(feedback);
       }
-
 
       container.appendChild(connectorArea);
     }
   });
 }
 
-
 function evaluateConnectors() {
-
-  const keys =
-    Object.keys(currentExercise.relations);
-
+  const keys = Object.keys(currentExercise.relations);
   let correctCount = 0;
-
   const normalizedAnswers = [];
 
-
   keys.forEach(key => {
-
     const answer =
       normalize(connectorAnswers[key] || "");
 
@@ -1385,7 +951,6 @@ function evaluateConnectors() {
     }
   });
 
-
   return {
     total: keys.length,
     correct: correctCount,
@@ -1393,18 +958,14 @@ function evaluateConnectors() {
   };
 }
 
-
 function findRepetitions(answers) {
-
   const repetitions = [];
 
   for (let i = 1; i < answers.length; i++) {
-
     if (
       answers[i] &&
       answers[i] === answers[i - 1]
     ) {
-
       repetitions.push({
         connector: answers[i],
         position: i
@@ -1415,18 +976,11 @@ function findRepetitions(answers) {
   return repetitions;
 }
 
-
 function buildConstructedText() {
-
-  const ordered =
-    getOrderedSentences();
-
-  let text =
-    ordered[0].text;
-
+  const ordered = getOrderedSentences();
+  let text = ordered[0].text;
 
   for (let i = 0; i < ordered.length - 1; i++) {
-
     const key =
       `${ordered[i].id}-${ordered[i + 1].id}`;
 
@@ -1443,9 +997,7 @@ function buildConstructedText() {
   return text;
 }
 
-
-function showTextEvaluation(evaluation) {
-
+function showTextEvaluation(connectorEvaluation) {
   const preview =
     document.getElementById("textPreview");
 
@@ -1455,41 +1007,31 @@ function showTextEvaluation(evaluation) {
   const grid =
     document.getElementById("evaluationGrid");
 
-
-  preview.classList.remove("hidden");
-
-  constructed.innerHTML =
-    buildConstructedText();
-
+  const relationEvaluation =
+    evaluateRelations();
 
   const repetitions =
-    findRepetitions(evaluation.answers);
-const relationEvaluation =
-  evaluateRelations();
+    findRepetitions(connectorEvaluation.answers);
+
+  preview.classList.remove("hidden");
+  constructed.innerHTML = buildConstructedText();
 
   const logicStatus =
-  relationEvaluation.correct === relationEvaluation.total
-    ? "✅"
-    : "❌";
-
-
-  const connectorStatus =
-    evaluation.correct === evaluation.total
+    relationEvaluation.correct === relationEvaluation.total
       ? "✅"
       : "❌";
 
+  const connectorStatus =
+    connectorEvaluation.correct === connectorEvaluation.total
+      ? "✅"
+      : "❌";
 
-  let varietyStatus =
-    "✅";
-
+  let varietyStatus = "✅";
   let varietyText =
     "Non sono presenti ripetizioni immediate dello stesso connettivo.";
 
-
   if (repetitions.length > 0) {
-
-    varietyStatus =
-      "⚠️";
+    varietyStatus = "⚠️";
 
     const repeated =
       [...new Set(
@@ -1502,37 +1044,35 @@ const relationEvaluation =
         .join(", ")}. La scelta può essere grammaticalmente corretta, ma rende il testo meno fluido.`;
   }
 
-
   let globalStatus =
     "✅ Testo coerente ed efficace.";
 
   if (
-    evaluation.correct === evaluation.total &&
+    connectorEvaluation.correct === connectorEvaluation.total &&
     repetitions.length > 0
   ) {
-
     globalStatus =
       "⚠️ Testo corretto, ma migliorabile dal punto di vista della varietà e della fluidità.";
   }
 
-  if (evaluation.correct < evaluation.total) {
-
+  if (
+    relationEvaluation.correct < relationEvaluation.total ||
+    connectorEvaluation.correct < connectorEvaluation.total
+  ) {
     globalStatus =
-      "❌ Il testo contiene uno o più collegamenti logicamente non adeguati.";
+      "❌ Il testo contiene uno o più collegamenti da rivedere.";
   }
 
-
-  grid.innerHTML =
-    `
+  grid.innerHTML = `
     <div class="evaluation-item">
-      <strong>${logicStatus} Coerenza logica</strong><br>
-      ${evaluation.correct}/${evaluation.total}
-      relazioni espresse correttamente.
+      <strong>${logicStatus} Relazioni logiche</strong><br>
+      ${relationEvaluation.correct}/${relationEvaluation.total}
+      relazioni riconosciute correttamente.
     </div>
 
     <div class="evaluation-item">
       <strong>${connectorStatus} Appropriatezza dei connettivi</strong><br>
-      ${evaluation.correct}/${evaluation.total}
+      ${connectorEvaluation.correct}/${connectorEvaluation.total}
       connettivi compatibili con il contesto.
     </div>
 
@@ -1545,19 +1085,14 @@ const relationEvaluation =
       <strong>Valutazione complessiva</strong><br>
       ${globalStatus}
     </div>
-    `;
+  `;
 }
 
-
 function verifyConnectors() {
-
-  const evaluation =
-    evaluateConnectors();
+  const evaluation = evaluateConnectors();
 
   renderConnectorExercise(true);
-
   showTextEvaluation(evaluation);
-
 
   const repetitions =
     findRepetitions(evaluation.answers);
@@ -1565,120 +1100,62 @@ function verifyConnectors() {
   const result =
     document.getElementById("connectorResult");
 
-
   if (evaluation.correct < evaluation.total) {
-
-    result.className =
-      "result wrong";
-
-    result.innerHTML =
-      `
+    result.className = "result wrong";
+    result.innerHTML = `
       <strong>Alcuni collegamenti devono essere rivisti.</strong><br>
-      Connettivi adeguati:
-      ${evaluation.correct}/${evaluation.total}.
-      <br>
+      Connettivi adeguati: ${evaluation.correct}/${evaluation.total}.<br>
       Osserva i feedback sotto ciascuna risposta.
-      `;
-
+    `;
   } else if (repetitions.length > 0) {
-
-    result.className =
-      "result warning";
-
-    result.innerHTML =
-      `
+    result.className = "result warning";
+    result.innerHTML = `
       <strong>⚠️ Tutti i connettivi sono possibili, ma il testo è migliorabile.</strong><br>
       Hai utilizzato consecutivamente lo stesso connettivo.
       Rileggi il testo completo e prova a renderlo più vario
       senza modificare le relazioni logiche.
-      `;
-
+    `;
   } else {
-
-    result.className =
-      "result correct";
-
-    result.innerHTML =
-      `
+    result.className = "result correct";
+    result.innerHTML = `
       <strong>✓ Ottimo lavoro.</strong><br>
-      I connettivi sono adeguati e non presentano
-      ripetizioni immediate.
-      Rileggi comunque il testo completo per verificarne
-      fluidità e naturalezza.
-      `;
+      I connettivi sono adeguati e non presentano ripetizioni immediate.
+      Rileggi comunque il testo completo per verificarne fluidità e naturalezza.
+    `;
   }
 }
-
-
-function hideResult(id) {
-
-  const result =
-    document.getElementById(id);
-
-  result.className =
-    "result";
-
-  result.innerHTML = "";
-}
-
 
 document
   .querySelectorAll(".level-btn")
   .forEach(button => {
+    button.addEventListener("click", () => {
+      document
+        .querySelectorAll(".level-btn")
+        .forEach(btn => btn.classList.remove("active"));
 
-    button.addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(".level-btn")
-          .forEach(
-            btn =>
-              btn.classList.remove("active")
-          );
-
-        button.classList.add("active");
-
-        currentLevel =
-          button.dataset.level;
-
-        loadExercise();
-      }
-    );
+      button.classList.add("active");
+      currentLevel = button.dataset.level;
+      loadExercise();
+    });
   });
-
 
 document
   .getElementById("verifyOrderBtn")
-  .addEventListener(
-    "click",
-    verifyOrder
-  );
+  .addEventListener("click", verifyOrder);
 
 document
   .getElementById("verifyRelationsBtn")
-  .addEventListener(
-    "click",
-    verifyRelations
-  );
+  .addEventListener("click", verifyRelations);
+
 document
   .getElementById("verifyConnectorsBtn")
-  .addEventListener(
-    "click",
-    verifyConnectors
-  );
-
+  .addEventListener("click", verifyConnectors);
 
 document
   .getElementById("newBtn")
-  .addEventListener(
-    "click",
-    loadExercise
-  );
-
+  .addEventListener("click", loadExercise);
 
 loadExercise();
-
 </script>
 
 </body>
