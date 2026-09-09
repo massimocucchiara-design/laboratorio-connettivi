@@ -7,11 +7,15 @@
   <title>Laboratorio della frase e dei connettivi</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
+      padding: 30px 20px;
       font-family: Arial, sans-serif;
       background: #f4f6f8;
-      margin: 0;
-      padding: 40px 20px;
       color: #222;
     }
 
@@ -19,9 +23,9 @@
       max-width: 900px;
       margin: 0 auto;
       background: white;
-      padding: 40px;
-      border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
 
     h1 {
@@ -31,15 +35,129 @@
 
     .subtitle {
       color: #666;
-      font-size: 1.1rem;
       line-height: 1.6;
+      margin-bottom: 30px;
     }
 
-    .box {
-      margin-top: 30px;
-      padding: 20px;
+    .levels {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .level-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #e5e7eb;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .level-btn.active {
+      background: #3446a3;
+      color: white;
+    }
+
+    .exercise-box {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 25px;
+    }
+
+    .exercise-title {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .sentence {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 2px solid #e5e7eb;
       border-radius: 10px;
-      background: #f3f5ff;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+
+    .sentence-text {
+      flex: 1;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .arrow-btn {
+      border: none;
+      background: #eef2ff;
+      color: #3446a3;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .main-btn {
+      flex: 1;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .verify-btn {
+      background: #3446a3;
+      color: white;
+    }
+
+    .new-btn {
+      background: #e5e7eb;
+      color: #333;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .result.correct {
+      display: block;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .result.wrong {
+      display: block;
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
+    @media (max-width: 650px) {
+      .levels,
+      .buttons {
+        flex-direction: column;
+      }
+
+      .container {
+        padding: 22px;
+      }
     }
   </style>
 </head>
@@ -51,19 +169,385 @@
     <h1>Laboratorio della frase e dei connettivi</h1>
 
     <p class="subtitle">
-      Impara a costruire sequenze coerenti, riconoscere le relazioni logiche
-      tra le frasi e scegliere i connettivi più appropriati.
+      Ricostruisci una sequenza coerente di frasi. Non devi ancora inserire
+      i connettivi: in questa prima attività lavoriamo sull'ordine logico
+      delle informazioni.
     </p>
 
-    <div class="box">
-      <strong>Versione 1 in costruzione</strong>
-      <p>
-        Qui compariranno gli esercizi interattivi di riordino delle frasi
-        e uso dei connettivi.
-      </p>
+    <div class="levels">
+      <button class="level-btn active" data-level="facile">Facile</button>
+      <button class="level-btn" data-level="medio">Medio</button>
+      <button class="level-btn" data-level="difficile">Difficile</button>
     </div>
 
+    <section class="exercise-box">
+
+      <h2 class="exercise-title">
+        Riordina le frasi
+      </h2>
+
+      <p>
+        Usa le frecce per mettere le frasi nella sequenza che ritieni più coerente.
+      </p>
+
+      <div id="sentences"></div>
+
+      <div class="buttons">
+        <button class="main-btn verify-btn" id="verifyBtn">
+          Verifica ordine
+        </button>
+
+        <button class="main-btn new-btn" id="newBtn">
+          Mescola di nuovo
+        </button>
+      </div>
+
+      <div id="result" class="result"></div>
+
+    </section>
+
   </main>
+
+  <script>
+
+    const exercises = {
+
+      facile: [
+        {
+          sentences: [
+            {
+              id: "A",
+              text: "Luca aveva un'interrogazione il giorno successivo."
+            },
+            {
+              id: "B",
+              text: "Ha deciso di studiare per tutta la sera."
+            },
+            {
+              id: "C",
+              text: "Alla fine è andato a dormire tardi."
+            }
+          ],
+          sequence: ["A", "B", "C"]
+        }
+      ],
+
+      medio: [
+        {
+          sentences: [
+            {
+              id: "A",
+              text: "Il cielo era diventato molto scuro."
+            },
+            {
+              id: "B",
+              text: "Cominciò a piovere molto forte."
+            },
+            {
+              id: "C",
+              text: "La partita fu interrotta."
+            },
+            {
+              id: "D",
+              text: "Gli spettatori cercarono riparo."
+            }
+          ],
+          sequence: ["A", "B", "C", "D"]
+        }
+      ],
+
+      difficile: [
+        {
+          sentences: [
+            {
+              id: "A",
+              text: "Marco desiderava partecipare al viaggio di istruzione."
+            },
+            {
+              id: "B",
+              text: "La quota di partecipazione era però piuttosto alta."
+            },
+            {
+              id: "C",
+              text: "Decise quindi di mettere da parte una parte dei suoi risparmi."
+            },
+            {
+              id: "D",
+              text: "Dopo alcune settimane riuscì a raggiungere la somma necessaria."
+            },
+            {
+              id: "E",
+              text: "Poté infine confermare la propria partecipazione."
+            }
+          ],
+          sequence: ["A", "B", "C", "D", "E"]
+        }
+      ]
+
+    };
+
+
+    let currentLevel = "facile";
+    let currentExercise = null;
+    let currentSentences = [];
+
+
+    function shuffle(array) {
+
+      const copy = [...array];
+
+      for (let i = copy.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+
+      }
+
+      return copy;
+    }
+
+
+    function loadExercise() {
+
+      const list = exercises[currentLevel];
+
+      currentExercise =
+        list[Math.floor(Math.random() * list.length)];
+
+      currentSentences =
+        shuffle(currentExercise.sentences);
+
+      renderSentences();
+
+      hideResult();
+    }
+
+
+    function renderSentences() {
+
+      const container =
+        document.getElementById("sentences");
+
+      container.innerHTML = "";
+
+
+      currentSentences.forEach((sentence, index) => {
+
+        const row =
+          document.createElement("div");
+
+        row.className = "sentence";
+
+
+        const controls =
+          document.createElement("div");
+
+        controls.className = "controls";
+
+
+        if (index > 0) {
+
+          const up =
+            document.createElement("button");
+
+          up.className = "arrow-btn";
+
+          up.textContent = "▲";
+
+          up.onclick =
+            () => moveUp(index);
+
+          controls.appendChild(up);
+        }
+
+
+        if (index < currentSentences.length - 1) {
+
+          const down =
+            document.createElement("button");
+
+          down.className = "arrow-btn";
+
+          down.textContent = "▼";
+
+          down.onclick =
+            () => moveDown(index);
+
+          controls.appendChild(down);
+        }
+
+
+        const text =
+          document.createElement("div");
+
+        text.className =
+          "sentence-text";
+
+        text.textContent =
+          sentence.text;
+
+
+        row.appendChild(controls);
+
+        row.appendChild(text);
+
+        container.appendChild(row);
+
+      });
+
+    }
+
+
+    function moveUp(index) {
+
+      if (index === 0) return;
+
+      [
+        currentSentences[index - 1],
+        currentSentences[index]
+      ] =
+      [
+        currentSentences[index],
+        currentSentences[index - 1]
+      ];
+
+      renderSentences();
+
+      hideResult();
+    }
+
+
+    function moveDown(index) {
+
+      if (index === currentSentences.length - 1) return;
+
+      [
+        currentSentences[index + 1],
+        currentSentences[index]
+      ] =
+      [
+        currentSentences[index],
+        currentSentences[index + 1]
+      ];
+
+      renderSentences();
+
+      hideResult();
+    }
+
+
+    function verifyOrder() {
+
+      const userSequence =
+        currentSentences.map(sentence => sentence.id);
+
+
+      const correctSequence =
+        currentExercise.sequence;
+
+
+      const isCorrect =
+        userSequence.every(
+          (id, index) =>
+            id === correctSequence[index]
+        );
+
+
+      const result =
+        document.getElementById("result");
+
+
+      if (isCorrect) {
+
+        result.className =
+          "result correct";
+
+        result.innerHTML =
+          `
+          <strong>✓ Sequenza coerente.</strong><br>
+          Hai ricostruito correttamente
+          l'ordine logico delle informazioni.
+          `;
+
+      } else {
+
+        result.className =
+          "result wrong";
+
+        result.innerHTML =
+          `
+          <strong>La sequenza non è ancora quella prevista.</strong><br>
+          Osserva quali informazioni possono
+          funzionare come causa, premessa
+          o conseguenza delle altre.
+          Prova a modificare l'ordine.
+          `;
+
+      }
+
+    }
+
+
+    function hideResult() {
+
+      const result =
+        document.getElementById("result");
+
+      result.className =
+        "result";
+
+      result.innerHTML = "";
+    }
+
+
+    document
+      .querySelectorAll(".level-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            document
+              .querySelectorAll(".level-btn")
+              .forEach(btn =>
+                btn.classList.remove("active")
+              );
+
+
+            button.classList.add("active");
+
+            currentLevel =
+              button.dataset.level;
+
+            loadExercise();
+
+          }
+        );
+
+      });
+
+
+    document
+      .getElementById("verifyBtn")
+      .addEventListener(
+        "click",
+        verifyOrder
+      );
+
+
+    document
+      .getElementById("newBtn")
+      .addEventListener(
+        "click",
+        loadExercise
+      );
+
+
+    loadExercise();
+
+  </script>
 
 </body>
 </html>
