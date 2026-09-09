@@ -1214,6 +1214,21 @@ let relationAnswers = {};
 let connectorAnswers = {};
 let supportMode = false;
 
+/* Coda casuale senza ripetizioni:
+   ogni esercizio di un livello viene proposto una volta
+   prima che il ciclo ricominci. */
+const exerciseQueues = {
+  facile: [],
+  medio: [],
+  difficile: []
+};
+
+const lastExerciseIndex = {
+  facile: null,
+  medio: null,
+  difficile: null
+};
+
 const session = {
   completed:0,
   perfect:0,
@@ -1227,6 +1242,37 @@ function shuffle(array){
     [copy[i],copy[j]]=[copy[j],copy[i]];
   }
   return copy;
+}
+
+function getNextExercise(level){
+  const list = exercises[level];
+
+  if(!list || list.length === 0){
+    throw new Error(`Nessun esercizio disponibile per il livello ${level}.`);
+  }
+
+  /* Quando la coda è vuota, crea un nuovo ordine casuale
+     contenente tutti gli esercizi del livello. */
+  if(exerciseQueues[level].length === 0){
+    exerciseQueues[level] = shuffle(
+      list.map((_, index) => index)
+    );
+
+    /* Evita che il primo esercizio del nuovo ciclo coincida
+       con l'ultimo appena visto. */
+    if(
+      exerciseQueues[level].length > 1 &&
+      exerciseQueues[level][0] === lastExerciseIndex[level]
+    ){
+      [exerciseQueues[level][0], exerciseQueues[level][1]] =
+      [exerciseQueues[level][1], exerciseQueues[level][0]];
+    }
+  }
+
+  const index = exerciseQueues[level].shift();
+  lastExerciseIndex[level] = index;
+
+  return list[index];
 }
 
 function normalize(text){
@@ -1280,8 +1326,7 @@ function resetFollowingStages(){
 }
 
 function loadExercise(){
-  const list=exercises[currentLevel];
-  currentExercise=list[Math.floor(Math.random()*list.length)];
+  currentExercise = getNextExercise(currentLevel);
   currentSentences=shuffle(currentExercise.sentences);
   relationAnswers={};
   connectorAnswers={};
@@ -1884,6 +1929,9 @@ document.getElementById("addTeacherExerciseBtn").addEventListener("click",()=>{
     sequence:ids,
     relations
   });
+
+  /* Ricrea la rotazione del livello includendo il nuovo esercizio. */
+  exerciseQueues[level] = [];
 
   showTeacherMessage("correct",
     "✓ Esercizio aggiunto alla sessione. Ora puoi chiudere la finestra e selezionare il livello corrispondente.");
