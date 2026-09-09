@@ -157,9 +157,14 @@
       color: #166534;
     }
 
+    .feedback.warning {
+      background: #fffbeb;
+      color: #92400e;
+    }
+
     .feedback.wrong {
-      background: #fff7ed;
-      color: #9a3412;
+      background: #fff1f2;
+      color: #9f1239;
     }
 
     .type-badge {
@@ -213,11 +218,48 @@
       border: 1px solid #bbf7d0;
     }
 
+    .result.warning {
+      display: block;
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
     .result.wrong {
       display: block;
-      background: #fff7ed;
-      color: #9a3412;
-      border: 1px solid #fed7aa;
+      background: #fff1f2;
+      color: #9f1239;
+      border: 1px solid #fecdd3;
+    }
+
+    .text-preview {
+      margin-top: 25px;
+      background: white;
+      border: 2px solid #dbeafe;
+      border-radius: 12px;
+      padding: 22px;
+    }
+
+    .text-preview h3 {
+      margin-top: 0;
+      color: #3446a3;
+    }
+
+    .constructed-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .evaluation-grid {
+      margin-top: 20px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .evaluation-item {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
     }
 
     .hidden {
@@ -244,8 +286,9 @@
   <h1>Laboratorio della frase e dei connettivi</h1>
 
   <p class="subtitle">
-    Costruisci una sequenza coerente e scegli i connettivi
-    che esprimono correttamente le relazioni logiche tra le informazioni.
+    Costruisci una sequenza coerente, individua le relazioni logiche
+    e scegli connettivi appropriati. Alla fine rileggi il testo nel suo insieme:
+    una frase può essere grammaticalmente corretta ma poco efficace nel contesto.
   </p>
 
   <div class="levels">
@@ -260,7 +303,6 @@
 
     <p class="instruction">
       Usa le frecce per ricostruire la sequenza che ritieni più coerente.
-      Solo dopo aver individuato l'ordine corretto potrai lavorare sui connettivi.
     </p>
 
     <div id="sentences"></div>
@@ -286,7 +328,7 @@
       </h2>
 
       <p class="instruction">
-        Ora collega le frasi scegliendo un connettivo coerente con
+        Collega le frasi scegliendo un connettivo coerente con
         la relazione logica tra le informazioni.
       </p>
 
@@ -294,11 +336,21 @@
 
       <div class="buttons">
         <button class="main-btn verify-btn" id="verifyConnectorsBtn">
-          Verifica connettivi
+          Verifica connettivi e testo
         </button>
       </div>
 
       <div id="connectorResult" class="result"></div>
+
+      <div id="textPreview" class="text-preview hidden">
+
+        <h3>Il testo che hai costruito</h3>
+
+        <div id="constructedText" class="constructed-text"></div>
+
+        <div id="evaluationGrid" class="evaluation-grid"></div>
+
+      </div>
 
     </div>
 
@@ -330,6 +382,7 @@ const exercises = {
       sequence: ["A", "B", "C"],
 
       relations: {
+
         "A-B": {
           type: "conseguenza",
           accepted: [
@@ -339,7 +392,7 @@ const exercises = {
             "di conseguenza"
           ],
           explanation:
-            "La decisione di studiare deriva dal fatto che Luca aveva un'interrogazione. La seconda informazione è quindi una conseguenza della prima."
+            "La decisione di studiare deriva dal fatto che Luca aveva un'interrogazione."
         },
 
         "B-C": {
@@ -347,10 +400,11 @@ const exercises = {
           accepted: [
             "quindi",
             "perciò",
-            "di conseguenza"
+            "di conseguenza",
+            "così"
           ],
           explanation:
-            "Studiare per tutta la sera ha come conseguenza il fatto che Luca vada a dormire tardi."
+            "Il fatto di andare a dormire tardi viene presentato come conseguenza dello studio protratto per tutta la sera."
         }
       }
     }
@@ -390,7 +444,7 @@ const exercises = {
             "ma"
           ],
           explanation:
-            "Ci si potrebbe aspettare che lo studio renda Giulia tranquilla; invece rimane agitata. La seconda informazione contrasta quindi con l'aspettativa creata dalla prima."
+            "La seconda informazione contrasta con l'aspettativa creata dalla prima."
         },
 
         "B-C": {
@@ -401,7 +455,7 @@ const exercises = {
             "però"
           ],
           explanation:
-            "Nonostante l'agitazione, Giulia riesce a svolgere la prova con attenzione. Le due informazioni sono in rapporto di contrasto."
+            "Nonostante l'agitazione, Giulia riesce a svolgere la prova con attenzione."
         },
 
         "C-D": {
@@ -413,7 +467,7 @@ const exercises = {
             "così"
           ],
           explanation:
-            "Il buon risultato viene presentato come conseguenza del modo attento con cui Giulia ha svolto la prova."
+            "Il buon risultato viene presentato come conseguenza dello svolgimento attento della prova."
         }
       }
     }
@@ -460,7 +514,7 @@ const exercises = {
             "ma"
           ],
           explanation:
-            "Il desiderio di partecipare incontra un ostacolo: il costo elevato del viaggio."
+            "Il desiderio di partecipare incontra un ostacolo: il costo elevato."
         },
 
         "B-C": {
@@ -471,7 +525,7 @@ const exercises = {
             "però"
           ],
           explanation:
-            "Nonostante il costo elevato, Marco non vuole rinunciare. La seconda informazione si oppone all'esito che ci si potrebbe aspettare dalla prima."
+            "Nonostante il costo elevato, Marco non vuole rinunciare."
         },
 
         "C-D": {
@@ -483,17 +537,18 @@ const exercises = {
             "di conseguenza"
           ],
           explanation:
-            "Poiché non vuole rinunciare al viaggio, Marco prende una decisione concreta: risparmiare."
+            "La decisione di risparmiare deriva dalla volontà di non rinunciare al viaggio."
         },
 
         "D-E": {
           type: "conseguenza",
           accepted: [
             "così",
-            "in questo modo"
+            "in questo modo",
+            "di conseguenza"
           ],
           explanation:
-            "Il raggiungimento della cifra necessaria è il risultato dell'azione di mettere da parte i risparmi."
+            "Il raggiungimento della cifra è il risultato dell'azione di risparmiare."
         },
 
         "E-F": {
@@ -504,7 +559,7 @@ const exercises = {
             "di conseguenza"
           ],
           explanation:
-            "Aver raggiunto la cifra necessaria permette a Marco di confermare la partecipazione."
+            "Aver raggiunto la cifra necessaria permette di confermare la partecipazione."
         }
       }
     }
@@ -527,7 +582,6 @@ function shuffle(array) {
     const j = Math.floor(Math.random() * (i + 1));
 
     [copy[i], copy[j]] = [copy[j], copy[i]];
-
   }
 
   return copy;
@@ -541,7 +595,14 @@ function normalize(text) {
     .trim()
     .replace(/[.,;:!?]+$/g, "")
     .replace(/\s+/g, " ");
+}
 
+
+function capitalize(text) {
+
+  if (!text) return "";
+
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 
@@ -563,8 +624,11 @@ function loadExercise() {
     .getElementById("connectorSection")
     .classList.add("hidden");
 
-  hideResult("orderResult");
+  document
+    .getElementById("textPreview")
+    .classList.add("hidden");
 
+  hideResult("orderResult");
   hideResult("connectorResult");
 }
 
@@ -587,18 +651,21 @@ function renderSentences() {
     const number =
       document.createElement("div");
 
-    number.className =
-      "sentence-number";
+    number.className = "sentence-number";
+    number.textContent = index + 1;
 
-    number.textContent =
-      index + 1;
+
+    const text =
+      document.createElement("div");
+
+    text.className = "sentence-text";
+    text.textContent = sentence.text;
 
 
     const controls =
       document.createElement("div");
 
-    controls.className =
-      "controls";
+    controls.className = "controls";
 
 
     if (index > 0) {
@@ -606,14 +673,9 @@ function renderSentences() {
       const up =
         document.createElement("button");
 
-      up.className =
-        "arrow-btn";
-
-      up.textContent =
-        "▲";
-
-      up.onclick =
-        () => moveUp(index);
+      up.className = "arrow-btn";
+      up.textContent = "▲";
+      up.onclick = () => moveUp(index);
 
       controls.appendChild(up);
     }
@@ -624,37 +686,19 @@ function renderSentences() {
       const down =
         document.createElement("button");
 
-      down.className =
-        "arrow-btn";
-
-      down.textContent =
-        "▼";
-
-      down.onclick =
-        () => moveDown(index);
+      down.className = "arrow-btn";
+      down.textContent = "▼";
+      down.onclick = () => moveDown(index);
 
       controls.appendChild(down);
     }
 
 
-    const text =
-      document.createElement("div");
-
-    text.className =
-      "sentence-text";
-
-    text.textContent =
-      sentence.text;
-
-
     row.appendChild(number);
-
     row.appendChild(text);
-
     row.appendChild(controls);
 
     container.appendChild(row);
-
   });
 }
 
@@ -673,7 +717,6 @@ function moveUp(index) {
   ];
 
   renderSentences();
-
   resetAfterMove();
 }
 
@@ -692,7 +735,6 @@ function moveDown(index) {
   ];
 
   renderSentences();
-
   resetAfterMove();
 }
 
@@ -700,11 +742,14 @@ function moveDown(index) {
 function resetAfterMove() {
 
   hideResult("orderResult");
-
   hideResult("connectorResult");
 
   document
     .getElementById("connectorSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("textPreview")
     .classList.add("hidden");
 }
 
@@ -712,33 +757,29 @@ function resetAfterMove() {
 function verifyOrder() {
 
   const userSequence =
-    currentSentences.map(
-      sentence => sentence.id
-    );
+    currentSentences.map(sentence => sentence.id);
 
   const correctSequence =
     currentExercise.sequence;
 
   const isCorrect =
     userSequence.every(
-      (id, index) =>
-        id === correctSequence[index]
+      (id, index) => id === correctSequence[index]
     );
 
   const result =
     document.getElementById("orderResult");
 
+
   if (isCorrect) {
 
-    result.className =
-      "result correct";
+    result.className = "result correct";
 
     result.innerHTML =
       `
-      <strong>✓ Ordine corretto.</strong><br>
-      La sequenza delle informazioni è coerente.
-      Ora osserva le relazioni tra le frasi e scegli
-      i connettivi più appropriati.
+      <strong>✓ Ordine coerente.</strong><br>
+      Hai ricostruito correttamente la sequenza delle informazioni.
+      Ora passa ai connettivi.
       `;
 
     document
@@ -749,21 +790,30 @@ function verifyOrder() {
 
   } else {
 
-    result.className =
-      "result wrong";
+    result.className = "result wrong";
 
     result.innerHTML =
       `
-      <strong>L'ordine non è ancora corretto.</strong><br>
-      Non cercare semplicemente quale frase "suona bene":
-      chiediti quale informazione costituisce la premessa,
-      quale presenta un contrasto e quale deriva dalle precedenti.
+      <strong>La sequenza non è ancora coerente.</strong><br>
+      Chiediti quale informazione costituisce una premessa,
+      quale introduce un contrasto e quale deriva dalle precedenti.
       `;
 
     document
       .getElementById("connectorSection")
       .classList.add("hidden");
   }
+}
+
+
+function getOrderedSentences() {
+
+  return currentExercise.sequence.map(
+    id =>
+      currentExercise.sentences.find(
+        sentence => sentence.id === id
+      )
+  );
 }
 
 
@@ -775,12 +825,7 @@ function renderConnectorExercise(showFeedback = false) {
   container.innerHTML = "";
 
   const ordered =
-    currentExercise.sequence.map(
-      id =>
-        currentExercise.sentences.find(
-          sentence => sentence.id === id
-        )
-    );
+    getOrderedSentences();
 
 
   ordered.forEach((sentence, index) => {
@@ -788,32 +833,24 @@ function renderConnectorExercise(showFeedback = false) {
     const row =
       document.createElement("div");
 
-    row.className =
-      "sentence";
+    row.className = "sentence";
 
 
     const number =
       document.createElement("div");
 
-    number.className =
-      "sentence-number";
-
-    number.textContent =
-      index + 1;
+    number.className = "sentence-number";
+    number.textContent = index + 1;
 
 
     const text =
       document.createElement("div");
 
-    text.className =
-      "sentence-text";
-
-    text.textContent =
-      sentence.text;
+    text.className = "sentence-text";
+    text.textContent = sentence.text;
 
 
     row.appendChild(number);
-
     row.appendChild(text);
 
     container.appendChild(row);
@@ -868,21 +905,22 @@ function renderConnectorExercise(showFeedback = false) {
             event.target.value;
 
           hideResult("connectorResult");
+
+          document
+            .getElementById("textPreview")
+            .classList.add("hidden");
         }
       );
 
 
       connectorArea.appendChild(label);
-
       connectorArea.appendChild(input);
 
 
       if (showFeedback) {
 
         const answer =
-          normalize(
-            connectorAnswers[relationKey] || ""
-          );
+          normalize(connectorAnswers[relationKey] || "");
 
         const accepted =
           relation.accepted.map(normalize);
@@ -894,17 +932,15 @@ function renderConnectorExercise(showFeedback = false) {
         const feedback =
           document.createElement("div");
 
-        feedback.className =
-          correct
-            ? "feedback correct"
-            : "feedback wrong";
-
 
         if (correct) {
 
+          feedback.className =
+            "feedback correct";
+
           feedback.innerHTML =
             `
-            <strong>✓ Scelta possibile.</strong><br>
+            <strong>✓ Connettivo grammaticalmente e logicamente possibile.</strong><br>
             ${relation.explanation}
             <br>
             <span class="type-badge">
@@ -914,17 +950,21 @@ function renderConnectorExercise(showFeedback = false) {
 
         } else {
 
+          feedback.className =
+            "feedback wrong";
+
           feedback.innerHTML =
             `
-            <strong>Rifletti sulla relazione.</strong><br>
-            Il connettivo inserito non esprime in modo adeguato
-            il rapporto logico previsto tra queste due informazioni.
+            <strong>✗ Il collegamento non è adeguato.</strong><br>
+            Prima di scegliere il connettivo, individua
+            il rapporto logico tra le due informazioni.
             <br>
             <span class="type-badge">
-              Relazione da riconoscere: ${relation.type}
+              Relazione: ${relation.type}
             </span>
             `;
         }
+
 
         connectorArea.appendChild(feedback);
       }
@@ -936,26 +976,25 @@ function renderConnectorExercise(showFeedback = false) {
 }
 
 
-function verifyConnectors() {
+function evaluateConnectors() {
+
+  const keys =
+    Object.keys(currentExercise.relations);
 
   let correctCount = 0;
 
-  const relations =
-    currentExercise.relations;
-
-  const keys =
-    Object.keys(relations);
+  const normalizedAnswers = [];
 
 
   keys.forEach(key => {
 
     const answer =
-      normalize(
-        connectorAnswers[key] || ""
-      );
+      normalize(connectorAnswers[key] || "");
+
+    normalizedAnswers.push(answer);
 
     const accepted =
-      relations[key]
+      currentExercise.relations[key]
         .accepted
         .map(normalize);
 
@@ -965,14 +1004,213 @@ function verifyConnectors() {
   });
 
 
+  return {
+    total: keys.length,
+    correct: correctCount,
+    answers: normalizedAnswers
+  };
+}
+
+
+function findRepetitions(answers) {
+
+  const repetitions = [];
+
+  for (let i = 1; i < answers.length; i++) {
+
+    if (
+      answers[i] &&
+      answers[i] === answers[i - 1]
+    ) {
+
+      repetitions.push({
+        connector: answers[i],
+        position: i
+      });
+    }
+  }
+
+  return repetitions;
+}
+
+
+function buildConstructedText() {
+
+  const ordered =
+    getOrderedSentences();
+
+  let text =
+    ordered[0].text;
+
+
+  for (let i = 0; i < ordered.length - 1; i++) {
+
+    const key =
+      `${ordered[i].id}-${ordered[i + 1].id}`;
+
+    const connector =
+      normalize(connectorAnswers[key] || "");
+
+    text +=
+      " " +
+      `<strong>${capitalize(connector)}</strong>` +
+      " " +
+      ordered[i + 1].text;
+  }
+
+  return text;
+}
+
+
+function showTextEvaluation(evaluation) {
+
+  const preview =
+    document.getElementById("textPreview");
+
+  const constructed =
+    document.getElementById("constructedText");
+
+  const grid =
+    document.getElementById("evaluationGrid");
+
+
+  preview.classList.remove("hidden");
+
+  constructed.innerHTML =
+    buildConstructedText();
+
+
+  const repetitions =
+    findRepetitions(evaluation.answers);
+
+
+  const logicStatus =
+    evaluation.correct === evaluation.total
+      ? "✅"
+      : "❌";
+
+
+  const connectorStatus =
+    evaluation.correct === evaluation.total
+      ? "✅"
+      : "❌";
+
+
+  let varietyStatus =
+    "✅";
+
+  let varietyText =
+    "Non sono presenti ripetizioni immediate dello stesso connettivo.";
+
+
+  if (repetitions.length > 0) {
+
+    varietyStatus =
+      "⚠️";
+
+    const repeated =
+      [...new Set(
+        repetitions.map(item => item.connector)
+      )];
+
+    varietyText =
+      `Hai ripetuto consecutivamente ${repeated
+        .map(item => `"${item}"`)
+        .join(", ")}. La scelta può essere grammaticalmente corretta, ma rende il testo meno fluido.`;
+  }
+
+
+  let globalStatus =
+    "✅ Testo coerente ed efficace.";
+
+  if (
+    evaluation.correct === evaluation.total &&
+    repetitions.length > 0
+  ) {
+
+    globalStatus =
+      "⚠️ Testo corretto, ma migliorabile dal punto di vista della varietà e della fluidità.";
+  }
+
+  if (evaluation.correct < evaluation.total) {
+
+    globalStatus =
+      "❌ Il testo contiene uno o più collegamenti logicamente non adeguati.";
+  }
+
+
+  grid.innerHTML =
+    `
+    <div class="evaluation-item">
+      <strong>${logicStatus} Coerenza logica</strong><br>
+      ${evaluation.correct}/${evaluation.total}
+      relazioni espresse correttamente.
+    </div>
+
+    <div class="evaluation-item">
+      <strong>${connectorStatus} Appropriatezza dei connettivi</strong><br>
+      ${evaluation.correct}/${evaluation.total}
+      connettivi compatibili con il contesto.
+    </div>
+
+    <div class="evaluation-item">
+      <strong>${varietyStatus} Varietà dei collegamenti</strong><br>
+      ${varietyText}
+    </div>
+
+    <div class="evaluation-item">
+      <strong>Valutazione complessiva</strong><br>
+      ${globalStatus}
+    </div>
+    `;
+}
+
+
+function verifyConnectors() {
+
+  const evaluation =
+    evaluateConnectors();
+
   renderConnectorExercise(true);
 
+  showTextEvaluation(evaluation);
+
+
+  const repetitions =
+    findRepetitions(evaluation.answers);
 
   const result =
     document.getElementById("connectorResult");
 
 
-  if (correctCount === keys.length) {
+  if (evaluation.correct < evaluation.total) {
+
+    result.className =
+      "result wrong";
+
+    result.innerHTML =
+      `
+      <strong>Alcuni collegamenti devono essere rivisti.</strong><br>
+      Connettivi adeguati:
+      ${evaluation.correct}/${evaluation.total}.
+      <br>
+      Osserva i feedback sotto ciascuna risposta.
+      `;
+
+  } else if (repetitions.length > 0) {
+
+    result.className =
+      "result warning";
+
+    result.innerHTML =
+      `
+      <strong>⚠️ Tutti i connettivi sono possibili, ma il testo è migliorabile.</strong><br>
+      Hai utilizzato consecutivamente lo stesso connettivo.
+      Rileggi il testo completo e prova a renderlo più vario
+      senza modificare le relazioni logiche.
+      `;
+
+  } else {
 
     result.className =
       "result correct";
@@ -980,23 +1218,10 @@ function verifyConnectors() {
     result.innerHTML =
       `
       <strong>✓ Ottimo lavoro.</strong><br>
-      Hai riconosciuto correttamente tutte le relazioni logiche
-      e hai scelto connettivi compatibili con il contesto.
-      <br><br>
-      <strong>Connettivi corretti: ${correctCount}/${keys.length}</strong>
-      `;
-
-  } else {
-
-    result.className =
-      "result wrong";
-
-    result.innerHTML =
-      `
-      <strong>Connettivi corretti: ${correctCount}/${keys.length}</strong><br>
-      Osserva i suggerimenti sotto le risposte.
-      Prima individua la relazione logica, poi scegli
-      il connettivo che può esprimerla.
+      I connettivi sono adeguati e non presentano
+      ripetizioni immediate.
+      Rileggi comunque il testo completo per verificarne
+      fluidità e naturalezza.
       `;
   }
 }
