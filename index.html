@@ -935,21 +935,69 @@ function renderConnectorExercise(showFeedback = false) {
 
         if (correct) {
 
-          feedback.className =
-            "feedback correct";
+  // Controlla se lo stesso connettivo
+  // è stato usato immediatamente prima
+  let repeated = false;
 
-          feedback.innerHTML =
-            `
-            <strong>✓ Connettivo grammaticalmente e logicamente possibile.</strong><br>
-            ${relation.explanation}
-            <br>
-            <span class="type-badge">
-              Relazione: ${relation.type}
-            </span>
-            `;
+  if (index > 0) {
 
-        } else {
+    const previousSentence = ordered[index - 1];
+    const previousKey =
+      `${previousSentence.id}-${sentence.id}`;
 
+    const previousAnswer =
+      normalize(connectorAnswers[previousKey] || "");
+
+    if (
+      answer &&
+      previousAnswer &&
+      answer === previousAnswer
+    ) {
+      repeated = true;
+    }
+  }
+
+
+  if (repeated) {
+
+    feedback.className =
+      "feedback warning";
+
+    feedback.innerHTML =
+      `
+      <strong>⚠️ Corretto, ma migliorabile.</strong><br>
+      Il connettivo <strong>"${answer}"</strong>
+      esprime correttamente una relazione di
+      <strong>${relation.type}</strong>,
+      ma lo hai già utilizzato nel collegamento precedente.
+      <br><br>
+      La frase è grammaticalmente possibile,
+      ma la ripetizione rende il testo meno fluido.
+      Prova a trovare un'altra formulazione adatta
+      alla stessa relazione logica.
+      <br>
+      <span class="type-badge">
+        Relazione: ${relation.type}
+      </span>
+      `;
+
+  } else {
+
+    feedback.className =
+      "feedback correct";
+
+    feedback.innerHTML =
+      `
+      <strong>✓ Scelta appropriata.</strong><br>
+      ${relation.explanation}
+      <br>
+      <span class="type-badge">
+        Relazione: ${relation.type}
+      </span>
+      `;
+  }
+
+} else {
           feedback.className =
             "feedback wrong";
 
